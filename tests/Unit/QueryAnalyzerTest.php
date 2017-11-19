@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class QueryAnalyzerTest extends TestCase
 {
     /** @test */
-    public function it_find_a_tag()
+    public function it_finds_a_tag()
     {
         $app = $this->createApplication();
 
