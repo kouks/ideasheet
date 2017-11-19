@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Idea;
+use App\Ideas\QueryAnalyzer;
 use App\Http\Requests\IdeaRequest;
 use App\Http\Controllers\Controller;
 
@@ -23,12 +24,12 @@ class IdeaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\IdeaRequest  $request
+     * @param  \App\Ideas\QueryAnalyzer  $analyzer
      * @return \Illuminate\Http\Response
      */
-    public function store(IdeaRequest $request)
+    public function store(QueryAnalyzer $analyzer)
     {
-        //
+        dd($analyzer);
     }
 
     /**
