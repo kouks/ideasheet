@@ -31,7 +31,7 @@ class IdeaApiTest extends TestCase
         $response = $this->withHeaders($this->headers)->get('/api/v1/ideas/1');
 
         $response->assertStatus(200)
-            ->assertJson($validResponse->toArray());
+            ->assertExactJson($validResponse->toArray());
     }
 
     /** @test */
@@ -42,7 +42,24 @@ class IdeaApiTest extends TestCase
         $response = $this->withHeaders($this->headers)->get('/api/v1/ideas');
 
         $response->assertStatus(200)
-            ->assertJson($validResponse->toArray());
+            ->assertExactJson($validResponse->toArray());
+    }
+
+    /** @test */
+    public function it_creates_an_idea()
+    {
+        $response = $this->withHeaders($this->headers)->post('/api/v1/ideas', [
+            'query' => '$ #tag Lorem Ipsum #000 http://idea.dev',
+        ]);
+
+        $response->assertStatus(201)
+            ->assertJson([
+                'content' => 'Lorem Ipsum',
+                'color' => '#000',
+                'query' => '$ #tag Lorem Ipsum #000 http://idea.dev',
+                'tags' => [ ['name' => 'tag'] ],
+                'attachments' => [ ['type' => \App\Models\Attachment::LINK, 'content' => 'http://idea.dev'] ]
+            ]);
     }
 
     /** @test */
@@ -51,6 +68,8 @@ class IdeaApiTest extends TestCase
         $response = $this->withHeaders($this->headers)->delete('/api/v1/ideas/1');
 
         $response->assertStatus(204);
+
+        $this->assertNull(\App\Models\Idea::find(1));
     }
 
     /** @test */
@@ -95,5 +114,15 @@ class IdeaApiTest extends TestCase
         $response = $this->withHeaders($this->headers)->put('/api/v1/ideas/1');
 
         $response->assertStatus(422);
+    }
+
+    /** @test */
+    public function it_shows_405_when_method_now_allowed()
+    {
+        $response = $this->withHeaders($this->headers)->post('/api/v1/ideas/1', [
+            'query' => '$ #tag lorem',
+        ]);
+
+        $response->assertStatus(405);
     }
 }

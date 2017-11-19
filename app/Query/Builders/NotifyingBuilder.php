@@ -2,7 +2,9 @@
 
 namespace App\Query\Builders;
 
-class NotifyingBuilder extends Builder
+use App\Contracts\Query\ShouldNotify;
+
+class NotifyingBuilder extends Builder implements ShouldNotify
 {
     //
 }

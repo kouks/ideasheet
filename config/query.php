@@ -25,7 +25,7 @@ return [
     */
 
     'parsers' => [
-        'codeSnippet' => App\Query\Parsers\CodeSnippetParser::class,
+        'codeSnippets' => App\Query\Parsers\CodeSnippetParser::class,
         'color' => App\Query\Parsers\ColorParser::class,
         'images' => App\Query\Parsers\ImageParser::class,
         'links' => App\Query\Parsers\LinkParser::class,

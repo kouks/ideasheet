@@ -7,6 +7,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 
 class Handler extends ExceptionHandler
 {
@@ -68,6 +69,11 @@ class Handler extends ExceptionHandler
         if ($exception instanceof ValidationException) {
             return response()
                 ->json(['error' => 'The request is missing the [query] parameter.'], 422);
+        }
+
+        if ($exception instanceof MethodNotAllowedException) {
+            return response()
+                ->json(['error' => 'The method is not allowed for this uri'], 405);
         }
 
         return parent::render($request, $exception);

@@ -3,6 +3,7 @@
 namespace App\Query;
 
 use App\Http\Requests\IdeaRequest;
+use Illuminate\Support\Collection;
 use App\Exceptions\Query\QueryNotAnalyzedException;
 use App\Contracts\Query\Analyzer as AnalyzerContract;
 use App\Exceptions\Query\InvalidBuilderDelimiterException;
@@ -33,9 +34,9 @@ class Analyzer implements AnalyzerContract
     /**
      * The parsed query.
      *
-     * @var array
+     * @var \Illuminate\Support\Collection
      */
-    protected $parsed = [];
+    protected $parsed;
 
     /**
      * The array of parsers.
@@ -62,6 +63,7 @@ class Analyzer implements AnalyzerContract
     {
         $this->parsers = $parsers;
         $this->builders = $builders;
+        $this->parsed = collect([]);
     }
 
     /**
@@ -85,7 +87,7 @@ class Analyzer implements AnalyzerContract
 
             $filtered = $parser->filterParts($parts);
 
-            $this->parsed[$name] = $filtered;
+            $this->parsed->put($name, $filtered);
 
             $parts = $parts->diff($filtered);
         }
@@ -108,7 +110,7 @@ class Analyzer implements AnalyzerContract
 
         $builder = $this->builders[$this->builderDelimiter];
 
-        return new $builder($this);
+        return new $builder($this->parsedQuery(), $this->query);
     }
 
     /**

@@ -2,9 +2,10 @@
 
 namespace App\Query\Parsers;
 
+use App\Contracts\Query\Parser as ParserContract;
 use Illuminate\Support\Collection;
 
-abstract class Parser
+abstract class Parser implements ParserContract
 {
     /**
      * Filters provided query parts based on child class regex.
