@@ -1,25 +1,44 @@
 {
-    "private": true,
-    "scripts": {
-        "dev": "npm run development",
-        "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "watch-poll": "npm run watch -- --watch-poll",
-        "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "prod": "npm run production",
-        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
-    },
-    "devDependencies": {
-        "axios": "^0.16.2",
-        "bootstrap-sass": "^3.3.7",
-        "cross-env": "^5.0.1",
-        "jquery": "^3.1.1",
-        "laravel-mix": "^1.0",
-        "lodash": "^4.17.4",
-        "vue": "^2.1.10"
-    },
-    "dependencies": {
-        "bulma": "^0.6.1",
-        "vue-router": "^3.0.1"
-    }
+  "private": true,
+  "scripts": {
+    "watch": "node resources/assets/build/dev.js",
+    "build": "node resources/assets/build/prod.js",
+    "test": "mocha-webpack --webpack-config webpack.config.js --recursive resources/assets/tests/**/*.spec.js --require resources/assets/tests/setup",
+    "prod": "npm run test && npm run build"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.1.2",
+    "browser-sync": "^2.18.13",
+    "chai": "^4.1.2",
+    "css-loader": "^0.28.7",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-html": "^3.2.2",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "friendly-errors-webpack-plugin": "^1.6.1",
+    "jsdom": "^11.3.0",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^4.0.1",
+    "mocha-webpack": "^1.0.1",
+    "node-sass": "^4.5.3",
+    "sass-loader": "^6.0.6",
+    "uglifyjs-webpack-plugin": "^1.0.1",
+    "vue": "^2.4.4",
+    "vue-loader": "^13.0.5",
+    "vue-router": "^2.7.0",
+    "vue-style-loader": "^3.0.3",
+    "vue-template-compiler": "^2.4.4",
+    "webpack": "^3.6.0",
+    "webpack-merge": "^4.1.1"
+  },
+  "dependencies": {
+    "axios": "^0.17.1",
+    "bulma": "^0.6.1",
+    "lodash": "^4.17.4"
+  }
 }
