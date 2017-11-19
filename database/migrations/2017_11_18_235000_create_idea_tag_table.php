@@ -17,10 +17,9 @@ class CreateIdeaTagTable extends Migration
             $table->increments('id');
             $table->integer('idea_id')->unsigned();
             $table->integer('tag_id')->unsigned();
-            $table->timestamps();
 
-            // $table->foreign('idea_id')->references('id')->on('ideas');
-            // $table->foreign('tag_id')->references('id')->on('tags');
+            $table->foreign('idea_id')->references('id')->on('ideas');
+            $table->foreign('tag_id')->references('id')->on('tags');
         });
     }
 

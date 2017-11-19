@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
+use App\Models\Idea;
+use App\Http\Requests\IdeaRequest;
 use App\Http\Controllers\Controller;
 
 class IdeaController extends Controller
@@ -14,16 +15,18 @@ class IdeaController extends Controller
      */
     public function index()
     {
-        //
+        $ideas = Idea::all();
+
+        return response($ideas->load(['tags', 'attachments']));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\IdeaRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(IdeaRequest $request)
     {
         //
     }
@@ -31,22 +34,22 @@ class IdeaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Idea  $idea
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Idea $idea)
     {
-        //
+        return response($idea->load(['tags', 'attachments']));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Http\Requests\IdeaRequest  $request
+     * @param  \App\Models\Idea  $idea
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(IdeaRequest $request, Idea $idea)
     {
         //
     }
@@ -54,11 +57,13 @@ class IdeaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Idea  $idea
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Idea $idea)
     {
-        //
+        $idea->delete();
+
+        return response(203);
     }
 }
