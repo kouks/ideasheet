@@ -7,6 +7,7 @@
 */
 
 // auth()->loginUsingId(1);
+// dd(app(App\Contracts\Query\Analyzer::class));
 
 /*
 |--------------------------------------------------------------------------

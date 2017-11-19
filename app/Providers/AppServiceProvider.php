@@ -15,10 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // The QueryAnalyzer instance
-        $this->app->bind('analyzer', function () {
-            return new QueryAnalyzer(new IdeaRequest);
-        });
+        //
     }
 
     /**
