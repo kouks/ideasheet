@@ -2,13 +2,8 @@
 
 namespace App\Ideas\Parsers;
 
-class ImageParser extends Parser
+class ContentParser extends Parser
 {
-    /**
-     * List of extensions an image can have.
-     */
-    const TYPES = [];
-
     /**
      * Provides the regex to filter by.
      *
@@ -16,7 +11,7 @@ class ImageParser extends Parser
      */
     public function regex()
     {
-        return '/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*).(png|jpg|jpeg|gif|bmp|svg)/';
+        return '/.+/';
     }
 
     /**
@@ -26,6 +21,6 @@ class ImageParser extends Parser
      */
     public function name()
     {
-        return 'images';
+        return 'content';
     }
 }
