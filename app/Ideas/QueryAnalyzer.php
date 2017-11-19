@@ -38,6 +38,7 @@ class QueryAnalyzer
         Parsers\ImageParser::class,
         Parsers\LinkParser::class,
         Parsers\TagParser::class,
+        Parsers\ContentParser::class,
     ];
 
     /**
@@ -62,8 +63,6 @@ class QueryAnalyzer
 
             $parts = $parts->diff($filtered);
         }
-
-        $this->parsed['content'] = $parts;
     }
 
     /**
