@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Ideas\QueryAnalyzer;
+use App\Http\Requests\IdeaRequest;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +15,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // The QueryAnalyzer instance
+        $this->app->bind('analyzer', function () {
+            return new QueryAnalyzer(new IdeaRequest);
+        });
     }
 
     /**

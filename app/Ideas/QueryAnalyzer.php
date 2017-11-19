@@ -41,27 +41,15 @@ class QueryAnalyzer
     ];
 
     /**
-     * Class constructor.
-     *
-     * @param  \App\Http\Requests\IdeaRequest  $request
-     * @return void
-     */
-    public function __construct(IdeaRequest $request)
-    {
-        $this->request = $request;
-
-        $this->parseQuery();
-    }
-
-    /**
      * Function to split parse the query by running it through
      * predefinied parsers
      *
+     * @param  string  $query
      * @return void
      */
-    protected function parseQuery()
+    public function parseQuery(string $query)
     {
-        $parts = $this->splitQuery();
+        $parts = $this->splitQuery($query);
 
         $parts->shift();
 
@@ -81,11 +69,12 @@ class QueryAnalyzer
     /**
      * Function to split the query based on the delimiter.
      *
+     * @param  string  $query
      * @return \Illuminate\Support\Collection
      */
-    protected function splitQuery()
+    protected function splitQuery(string $query)
     {
-        return collect(explode($this->splitDelimiter, $this->request['query']));
+        return collect(explode($this->splitDelimiter, $query));
     }
 
     /**
