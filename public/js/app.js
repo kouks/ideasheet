@@ -12204,6 +12204,10 @@ if (false) {(function () {
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
   //
@@ -12225,7 +12229,13 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [_c("div", [_vm._v("Hello")])])
+    return _c("header", { staticClass: "hero is-medium" }, [
+      _c("div", { staticClass: "hero-body" }, [
+        _c("div", { staticClass: "container has-text-centered" }, [
+          _c("textarea", [_vm._v("asdasd")])
+        ])
+      ])
+    ])
   }
 ]
 render._withStripped = true

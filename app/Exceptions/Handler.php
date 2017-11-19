@@ -3,6 +3,9 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -48,6 +51,25 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if (! $request->wantsJson()) {
+            return parent::render($request, $exception);
+        }
+
+        if ($exception instanceof ModelNotFoundException) {
+            return response()
+                ->json(['error' => 'The requested resource does not exist.'], 404);
+        }
+
+        if ($exception instanceof AuthenticationException) {
+            return response()
+                ->json(['error' => 'The provided API token is invalid.'], 401);
+        }
+
+        if ($exception instanceof ValidationException) {
+            return response()
+                ->json(['error' => 'The request is missing the [query] parameter.'], 422);
+        }
+
         return parent::render($request, $exception);
     }
 }

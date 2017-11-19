@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use App\Contracts\Query\Analyzer;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ParserTest extends TestCase
 {

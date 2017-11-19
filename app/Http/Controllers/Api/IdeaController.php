@@ -3,12 +3,22 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Idea;
-use App\Ideas\QueryAnalyzer;
+use App\Contracts\Query\Analyzer;
 use App\Http\Requests\IdeaRequest;
 use App\Http\Controllers\Controller;
 
 class IdeaController extends Controller
 {
+    /**
+     * Class constructor.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Idea::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,16 +28,18 @@ class IdeaController extends Controller
     {
         $ideas = Idea::all();
 
-        return response($ideas->load(['tags', 'attachments']));
+        return response()
+            ->json($ideas->load(['tags', 'attachments']), 200);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Ideas\QueryAnalyzer  $analyzer
+     * @param  \App\Http\Requests\IdeaRequest  $request
+     * @param  \App\Ideas\Analyzer  $analyzer
      * @return \Illuminate\Http\Response
      */
-    public function store(QueryAnalyzer $analyzer)
+    public function store(IdeaRequest $request, Analyzer $analyzer)
     {
         dd($analyzer);
     }
@@ -40,7 +52,8 @@ class IdeaController extends Controller
      */
     public function show(Idea $idea)
     {
-        return response($idea->load(['tags', 'attachments']));
+        return response()
+            ->json($idea->load(['tags', 'attachments']), 200);
     }
 
     /**
@@ -63,8 +76,8 @@ class IdeaController extends Controller
      */
     public function destroy(Idea $idea)
     {
-        $idea->delete();
+        // $idea->delete();
 
-        return response(203);
+        return response(null, 204);
     }
 }
