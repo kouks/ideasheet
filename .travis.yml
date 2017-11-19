@@ -10,5 +10,14 @@ install:
   - travis_retry composer install
   - travis_retry npm install
 
+before_script:
+  - mkdir -p storage/framework/{cache,views,sessions}
+  - cp .env.travis .env
+  - php artisan key:generate
+  - php artisan cache:clear
+  - php artisan config:clear
+  - php artisan view:clear
+  - php artisan clear-compiled
+
 script:
   - vendor/bin/phpunit
