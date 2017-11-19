@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Ideas\Parsers;
+namespace App\Query\Parsers;
 
 class ContentParser extends Parser
 {
@@ -12,15 +12,5 @@ class ContentParser extends Parser
     public function regex()
     {
         return '/.+/';
-    }
-
-    /**
-     * Provides the name of the parser.
-     *
-     * @return string
-     */
-    public function name()
-    {
-        return 'content';
     }
 }

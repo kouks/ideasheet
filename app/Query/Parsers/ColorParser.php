@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Ideas\Parsers;
+namespace App\Query\Parsers;
 
 class ColorParser extends Parser
 {
@@ -12,15 +12,5 @@ class ColorParser extends Parser
     public function regex()
     {
         return '/^#([a-f0-9]{3}){1,2}$/';
-    }
-
-    /**
-     * Provides the name of the parser.
-     *
-     * @return string
-     */
-    public function name()
-    {
-        return 'color';
     }
 }

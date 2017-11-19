@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Ideas\Parsers;
+namespace App\Query\Parsers;
 
 class TagParser extends Parser
 {
@@ -12,15 +12,5 @@ class TagParser extends Parser
     public function regex()
     {
         return '/^#[a-z0-9-]+$/';
-    }
-
-    /**
-     * Provides the name of the parser.
-     *
-     * @return string
-     */
-    public function name()
-    {
-        return 'tags';
     }
 }

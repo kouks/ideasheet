@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Contracts\Query\Analyzer;
 use Illuminate\Support\ServiceProvider;
 
 class QueryServiceProvider extends ServiceProvider
@@ -13,7 +14,7 @@ class QueryServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind(App\Contracts\Query\Analyzer::class, function () {
+        $this->app->bind(Analyzer::class, function () {
             $analyzer = config('query.analyzer');
 
             return new $analyzer(config('query.parsers'), config('query.builders'));

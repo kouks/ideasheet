@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Ideas\Parsers;
+namespace App\Query\Parsers;
 
 use Illuminate\Support\Collection;
 
@@ -25,11 +25,4 @@ abstract class Parser
      * @return string
      */
     abstract public function regex();
-
-    /**
-     * Provides the name of the parser.
-     *
-     * @return string
-     */
-    abstract public function name();
 }

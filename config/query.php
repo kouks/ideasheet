@@ -12,7 +12,7 @@ return [
     |
     */
 
-    'analyzer' => App\Ideas\QueryAnalyzer::class,
+    'analyzer' => App\Query\Analyzer::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -25,12 +25,12 @@ return [
     */
 
     'parsers' => [
-        'codeSnippet' => App\Ideas\Parsers\CodeSnippetParser::class,
-        'color' => App\Ideas\Parsers\ColorParser::class,
-        'images' => App\Ideas\Parsers\ImageParser::class,
-        'links' => App\Ideas\Parsers\LinkParser::class,
-        'tags' => App\Ideas\Parsers\TagParser::class,
-        'content' => App\Ideas\Parsers\ContentParser::class,
+        'codeSnippet' => App\Query\Parsers\CodeSnippetParser::class,
+        'color' => App\Query\Parsers\ColorParser::class,
+        'images' => App\Query\Parsers\ImageParser::class,
+        'links' => App\Query\Parsers\LinkParser::class,
+        'tags' => App\Query\Parsers\TagParser::class,
+        'content' => App\Query\Parsers\ContentParser::class,
     ],
 
     /*
@@ -44,8 +44,8 @@ return [
     */
 
     'builders' => [
-        '$' => App\Ideas\Builders\DefaultBuilder::class,
-        '$!' => App\Ideas\Builders\NotifyingBuilder::class,
+        '$' => App\Query\Builders\DefaultBuilder::class,
+        '$!' => App\Query\Builders\NotifyingBuilder::class,
     ]
 
 ];
