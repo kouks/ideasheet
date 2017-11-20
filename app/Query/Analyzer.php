@@ -123,7 +123,7 @@ class Analyzer implements AnalyzerContract
      */
     protected function assignBuilderDelimiter(string $delimiter)
     {
-        if (!array_key_exists($delimiter, $this->builders)) {
+        if (! array_key_exists($delimiter, $this->builders)) {
             throw new InvalidBuilderDelimiterException("The delimiter [$delimiter] is invalid.");
         }
 
