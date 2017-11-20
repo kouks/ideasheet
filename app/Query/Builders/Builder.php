@@ -2,7 +2,6 @@
 
 namespace App\Query\Builders;
 
-use Closure;
 use Illuminate\Support\Collection;
 use App\Contracts\Query\Builder as BuilderContract;
 

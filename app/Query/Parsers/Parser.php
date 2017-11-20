@@ -2,8 +2,8 @@
 
 namespace App\Query\Parsers;
 
-use App\Contracts\Query\Parser as ParserContract;
 use Illuminate\Support\Collection;
+use App\Contracts\Query\Parser as ParserContract;
 
 abstract class Parser implements ParserContract
 {

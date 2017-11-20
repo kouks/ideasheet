@@ -46,6 +46,6 @@ return [
     'builders' => [
         '$' => App\Query\Builders\DefaultBuilder::class,
         '$!' => App\Query\Builders\NotifyingBuilder::class,
-    ]
+    ],
 
 ];

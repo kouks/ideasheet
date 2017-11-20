@@ -15,7 +15,7 @@ interface Analyzer
     public function analyze(string $query);
 
     /**
-     * Retrieve correct builder to further work with the parsed data
+     * Retrieve correct builder to further work with the parsed data.
      *
      * @return \App\Query\Builders\Builder
      *

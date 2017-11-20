@@ -2,8 +2,6 @@
 
 namespace App\Query;
 
-use App\Http\Requests\IdeaRequest;
-use Illuminate\Support\Collection;
 use App\Exceptions\Query\QueryNotAnalyzedException;
 use App\Contracts\Query\Analyzer as AnalyzerContract;
 use App\Exceptions\Query\InvalidBuilderDelimiterException;
@@ -96,7 +94,7 @@ class Analyzer implements AnalyzerContract
     }
 
     /**
-     * Retrieve correct builder to further work with the parsed data
+     * Retrieve correct builder to further work with the parsed data.
      *
      * @return \App\Query\Builders\Builder
      *

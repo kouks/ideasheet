@@ -4,5 +4,7 @@ risky: false
 
 finder:
   exclude:
-    - "tests/"
-    - "vendor/"
+    - tests/
+    - vendor/
+    - public/
+    - server.php
