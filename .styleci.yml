@@ -7,4 +7,5 @@ finder:
     - tests/
     - vendor/
     - public/
+  not-name:
     - server.php

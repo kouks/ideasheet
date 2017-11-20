@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Ideas\QueryAnalyzer;
-use App\Http\Requests\IdeaRequest;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
