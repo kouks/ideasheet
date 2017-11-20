@@ -7,6 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 class Attachment extends Model
 {
     /**
+     * Enumeration of attachment types.
+     *
+     * @var int
+     */
+    const LINK = 0;
+    const IMAGE = 1;
+    const CODE = 2;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'type', 'content',
+    ];
+
+    /**
      * Specifies the belongs to relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

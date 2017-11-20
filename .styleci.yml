@@ -1,0 +1,11 @@
+preset: laravel
+
+risky: false
+
+finder:
+  exclude:
+    - tests/
+    - vendor/
+    - public/
+  not-name:
+    - server.php

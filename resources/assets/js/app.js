@@ -18,7 +18,7 @@ require('./helpers')
 
 Vue.use(Router)
 
-new Vue({
+export default new Vue({
   components: { App },
   el: '#app',
   router: new Router({ routes }),
