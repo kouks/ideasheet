@@ -1,3 +1,40 @@
 
 .idea
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.4)
+
+  &-content
+    padding: 20px;
+    font-size: $size-6
+
+    &.is-caption
+      font-size: $size-4
+      padding-bottom: 20px
+
+    &:not(.is-caption)
+      max-height: 150px
+      overflow: hidden
+
+      &:hover
+        max-height: 1000px
+
+  &-tags
+    background: white
+    font-size: $size-7
+    padding: 10px
+
+    .idea-tag
+      display: inline-block
+      background: $light
+      padding: 4px 7px
+      margin-right: 5px
+      border-radius: $radius-small
+
+  &-snippet
+    background: $light
+    padding: 10px
+
+
+
+
+
 

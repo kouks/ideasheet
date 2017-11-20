@@ -12327,9 +12327,31 @@ if (false) {(function () {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-  props: ['idea']
+  props: ['idea'],
+
+  computed: {
+    contentClass() {
+      return this.idea.content.length < 50 ? 'is-caption' : '';
+    },
+
+    attachments() {
+      return type => {
+        return this.idea.attachments.filter(item => item.type === type);
+      };
+    }
+  }
 });
 
 /***/ }),
@@ -12341,19 +12363,44 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "column is-4" },
-    [
-      _vm._v("\n  " + _vm._s(_vm.idea.content) + "\n\n  "),
-      _vm._l(_vm.idea.tags, function(tag) {
-        return _c("a", { attrs: { href: "/#" + tag.name } }, [
-          _vm._v("#" + _vm._s(tag.name) + " ")
-        ])
-      })
-    ],
-    2
-  )
+  return _c("div", { staticClass: "column is-4" }, [
+    _c(
+      "div",
+      { staticClass: "idea" },
+      [
+        _c("div", { class: ["idea-content", _vm.contentClass] }, [
+          _vm._v("\n      " + _vm._s(_vm.idea.content) + "\n    ")
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.idea.tags.length,
+                expression: "idea.tags.length"
+              }
+            ],
+            staticClass: "idea-tags"
+          },
+          _vm._l(_vm.idea.tags, function(tag) {
+            return _c("a", { staticClass: "idea-tag", attrs: { href: "" } }, [
+              _vm._v("#" + _vm._s(tag.name))
+            ])
+          })
+        ),
+        _vm._v(" "),
+        _vm._l(_vm.attachments(2), function(snippet) {
+          return _c("div", { staticClass: "idea-snippet" }, [
+            _c("code", [_vm._v(_vm._s(snippet.content.replace("`", "")))])
+          ])
+        })
+      ],
+      2
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

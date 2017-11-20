@@ -13,7 +13,7 @@ class Attachment extends Model
      */
     const LINK = 0;
     const IMAGE = 1;
-    const CODE = 2;
+    const CODE_SNIPPET = 2;
 
     /**
      * The attributes that are mass assignable.
