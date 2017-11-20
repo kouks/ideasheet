@@ -11,6 +11,6 @@ class CodeSnippetParser extends Parser
      */
     public function regex()
     {
-        return '/asdasd/';
+        return '/`.+`/';
     }
 }

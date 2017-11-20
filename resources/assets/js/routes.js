@@ -1,9 +1,9 @@
-import Example from '@/components/Example'
+import Index from '@/components/Index'
 
 export default [
   {
     path: '/',
-    component: Example,
+    component: Index,
     name: 'home'
   }
 ]

@@ -125,4 +125,35 @@ class IdeaApiTest extends TestCase
 
         $response->assertStatus(405);
     }
+
+    /** @test */
+    public function it_shows_422_when_invalid_delimiter()
+    {
+        $response = $this->withHeaders($this->headers)->post('/api/v1/ideas', [
+            'query' => '#tag',
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    /** @test */
+    public function it_stores_ideas_with_no_content_or_color()
+    {
+        $response = $this->withHeaders($this->headers)->post('/api/v1/ideas', [
+            'query' => '$ #tag',
+        ]);
+
+        $response->assertStatus(201);
+    }
+
+    /** @test */
+    public function it_sorts_ideas_by_date_desc()
+    {
+        $response = $this->withHeaders($this->headers)->get('/api/v1/ideas');
+
+        $data = json_decode($response->content());
+
+        $this->assertEquals((int) $data[count($data) - 1]->id, 1);
+        $this->assertEquals((int) $data[0]->id, count($data));
+    }
 }

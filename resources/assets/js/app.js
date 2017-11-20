@@ -9,6 +9,7 @@ import Router from 'vue-router'
  */
 
 require('./bootstrap')
+require('./directives')
 require('./helpers')
 
 /**
