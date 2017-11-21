@@ -49,4 +49,19 @@ class BuilderTest extends TestCase
             $builder
         );
     }
+
+    /** @test */
+    public function it_correctly_builds_code_snippet_attachment()
+    {
+        $analyzer = $this->app->make(Analyzer::class);
+        $query = '$ #git Revert all changes from last commit `git checkout -- .`';
+
+        $data = $analyzer->analyze($query)->builder()->build();
+
+        $this->assertArraySubset([
+            'attachments' => [
+                [ 'type' => \App\Models\Attachment::CODE_SNIPPET, 'content' => '`git checkout -- .`' ]
+            ]
+        ], $data);
+    }
 }
