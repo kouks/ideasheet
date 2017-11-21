@@ -2,7 +2,6 @@
 
 namespace App\Query\Builders;
 
-use Illuminate\Support\Collection;
 use App\Contracts\Query\Builder as BuilderContract;
 
 abstract class Builder implements BuilderContract

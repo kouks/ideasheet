@@ -18,7 +18,7 @@ class DelimiterParser extends Parser
      */
     public function regex()
     {
-        return '/^' . $this->delimitersToRegex() . '/';
+        return '/^'.$this->delimitersToRegex().'/';
     }
 
     /**

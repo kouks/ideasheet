@@ -122,4 +122,15 @@ class ParserTest extends TestCase
         $this->assertEquals($query2, 'lorem #tag');
         $this->assertEquals($parser->matches()->toArray(), ['@']);
     }
+
+    /** @test */
+    public function it_parses_uppercase_tag()
+    {
+        $parser = new \App\Query\Parsers\TagParser;
+
+        $query = $parser->parse('#TAG lorem');
+
+        $this->assertEquals($query, 'lorem');
+        $this->assertEquals($parser->matches()->toArray(), ['#TAG']);
+    }
 }

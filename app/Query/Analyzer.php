@@ -67,7 +67,7 @@ class Analyzer implements AnalyzerContract
         $this->query = $query;
 
         foreach ($this->parsers as $parser) {
-             $query = $parser->parse($query);
+            $query = $parser->parse($query);
         }
 
         return $this;
