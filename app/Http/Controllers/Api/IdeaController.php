@@ -28,7 +28,7 @@ class IdeaController extends Controller
      */
     public function index()
     {
-        $ideas = Idea::all();
+        $ideas = Idea::orderBy('id', 'desc')->get();
 
         return response()
             ->json($ideas->load(['tags', 'attachments']), 200);
@@ -43,34 +43,32 @@ class IdeaController extends Controller
      */
     public function store(IdeaRequest $request, Analyzer $analyzer)
     {
-        // First we retrieve parsed data from the query
-        // by running it through our glorious analyzer.
+        // First we retrieve parsed data from the query by running it through
+        // our glorious analyzer.
         $builder = $analyzer->analyze($request['query'])->builder();
         $data = $builder->build();
 
-        // Then we create the actual idea and assign it
-        // to the user, whom we find by the api token.
+        // Then we create the actual idea and assign it to the user, whom we
+        // find by the api token.
         $idea = $request->user()->ideas()->create($data);
 
-        // This part makes sure that provided tags will not
-        // be duplicates and attaches them to our new idea.
+        // This part makes sure that provided tags will not be duplicates and
+        // attaches them to our new idea.
         Tag::createNew($data['tags'])->each(function (Tag $tag) use ($idea) {
             $idea->tags()->attach($tag);
         });
 
-        // We add all the attachments that we parsed from
-        // the query string.
+        // We add all the attachments that we parsed from the query string.
         $idea->attachments()->createMany($data['attachments']);
 
-        // One last thing before sending the response is to
-        // make sure that if the users should be notified
-        // about our new idea, we do so.
+        // One last thing before sending the response is to make sure that if
+        // the users should be notified about our new idea, we do so.
         // if ($builder instanceof ShouldNotify) {
         //     //
         // }
 
-        // Finally we return a 201 CREATED response with
-        // all the data about the new idea.
+        // Finally we return a 201 CREATED response with all the data about the
+        // new idea.
         return response()
             ->json($idea->load(['tags', 'attachments']), 201);
     }

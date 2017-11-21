@@ -118,4 +118,20 @@ class ParserTest extends TestCase
             'Lorem ipsum.'
         );
     }
+
+    /** @test */
+    public function it_finds_a_code_snippet()
+    {
+        $parser = new \App\Query\Parsers\CodeSnippetParser;
+
+        $parts = $parser->filterParts(collect([
+            '`git push`',
+            'ipsum.',
+        ]));
+
+        $this->assertEquals(
+            $parts->first(),
+            '`git push`'
+        );
+    }
 }

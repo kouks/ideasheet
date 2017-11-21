@@ -76,8 +76,13 @@ class Analyzer implements AnalyzerContract
     {
         $this->query = $query;
 
+        // We split the query string by the predefined delimiter which is
+        // a space character by default.
         $parts = $this->splitQuery();
 
+        // Assign the builder delimiter to an instance variable while checking
+        // if it is valid. Builder delimiter needs to be the first part of the
+        // query, that is why we shift the $parts collection.
         $this->assignBuilderDelimiter($parts->shift());
 
         foreach ($this->parsers as $name => $parser) {
