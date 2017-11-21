@@ -10,7 +10,7 @@
       </div>
 
       <div class="idea-snippet" v-for="snippet in attachments(2)">
-        <code>{{ snippet.content.replace('`', '') }}</code>
+        <code>{{ snippet.content.replaceAll('`', '') }}</code>
       </div>
     </div>
   </div>

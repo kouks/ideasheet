@@ -12394,7 +12394,7 @@ var render = function() {
         _vm._v(" "),
         _vm._l(_vm.attachments(2), function(snippet) {
           return _c("div", { staticClass: "idea-snippet" }, [
-            _c("code", [_vm._v(_vm._s(snippet.content.replace("`", "")))])
+            _c("code", [_vm._v(_vm._s(snippet.content.replaceAll("`", "")))])
           ])
         })
       ],
@@ -16239,6 +16239,11 @@ window.getBootTime = () => {
   const domInteractive = window.performance.timing.domInteractive;
 
   return domInteractive - requestStart;
+};
+
+String.prototype.replaceAll = function (search, replacement) {
+  // eslint-disable-line
+  return this.replace(new RegExp(search, 'g'), replacement);
 };
 
 /***/ }),

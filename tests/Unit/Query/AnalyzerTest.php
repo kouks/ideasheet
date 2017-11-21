@@ -17,18 +17,6 @@ class AnalyzerTest extends TestCase
         $this->app = $this->createApplication();
     }
 
-    /** @test */
-    public function it_correctly_splits_the_query_string()
-    {
-        $analyzer = $this->app->make(Analyzer::class);
-
-        $analyzer->analyze('$ Lorem #test ipsum.');
-
-        $countParsers = count(config('query.parsers'));
-
-        $this->assertCount($countParsers, $analyzer->parsedQuery());
-    }
-
     /**
      * @test
      * @expectedException \App\Exceptions\Query\InvalidBuilderDelimiterException
@@ -37,7 +25,7 @@ class AnalyzerTest extends TestCase
     {
         $analyzer = $this->app->make(Analyzer::class);
 
-        $analyzer->analyze('Lorem #test ipsum.');
+        $analyzer->analyze('Lorem #test ipsum.')->builder();
     }
 
     /**

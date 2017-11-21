@@ -30,13 +30,6 @@ class Analyzer implements AnalyzerContract
     protected $query;
 
     /**
-     * The parsed query.
-     *
-     * @var \Illuminate\Support\Collection
-     */
-    protected $parsed;
-
-    /**
      * The array of parsers.
      *
      * @var array
@@ -61,7 +54,6 @@ class Analyzer implements AnalyzerContract
     {
         $this->parsers = $parsers;
         $this->builders = $builders;
-        $this->parsed = collect([]);
     }
 
     /**
@@ -69,30 +61,13 @@ class Analyzer implements AnalyzerContract
      *
      * @param  string  $query
      * @return self
-     *
-     * @throws \App\Exceptions\Query\InvalidBuilderDelimiterException
      */
     public function analyze(string $query)
     {
         $this->query = $query;
 
-        // We split the query string by the predefined delimiter which is
-        // a space character by default.
-        $parts = $this->splitQuery();
-
-        // Assign the builder delimiter to an instance variable while checking
-        // if it is valid. Builder delimiter needs to be the first part of the
-        // query, that is why we shift the $parts collection.
-        $this->assignBuilderDelimiter($parts->shift());
-
-        foreach ($this->parsers as $name => $parser) {
-            $parser = new $parser;
-
-            $filtered = $parser->filterParts($parts);
-
-            $this->parsed->put($name, $filtered);
-
-            $parts = $parts->diff($filtered);
+        foreach ($this->parsers as $parser) {
+             $query = $parser->parse($query);
         }
 
         return $this;
@@ -103,34 +78,39 @@ class Analyzer implements AnalyzerContract
      *
      * @return \App\Query\Builders\Builder
      *
+     * @throws \App\Exceptions\Query\InvalidBuilderDelimiterException
      * @throws \App\Exceptions\Query\QueryNotAnalyzedException
      */
     public function builder()
     {
-        if (! $this->builderDelimiter) {
-            throw new QueryNotAnalyzedException('The query needs to be analyzed first.');
-        }
+        $builder = $this->builders[$this->getBuilderDelimtier()];
 
-        $builder = $this->builders[$this->builderDelimiter];
-
-        return new $builder($this->parsedQuery(), $this->query);
+        return new $builder($this->parsers, $this->query);
     }
 
     /**
-     * Assigns the buidler delimiter to an instance variable.
+     * Determines the builder delimiter from the DelmiterParser class instance.
      *
-     * @param  string  $delimiter
-     * @return void
+     * @return string
      *
      * @throws \App\Exceptions\Query\InvalidBuilderDelimiterException
+     * @throws \App\Exceptions\Query\QueryNotAnalyzedException
      */
-    protected function assignBuilderDelimiter(string $delimiter)
+    protected function getBuilderDelimtier()
     {
+        $delimtierParser = $this->parsers['delimiter'];
+
+        if (! $delimtierParser->matches()) {
+            throw new QueryNotAnalyzedException('The query needs to be analyzed first.');
+        }
+
+        $delimiter = $delimtierParser->matches()->first();
+
         if (! array_key_exists($delimiter, $this->builders)) {
             throw new InvalidBuilderDelimiterException("The delimiter [$delimiter] is invalid.");
         }
 
-        $this->builderDelimiter = $delimiter;
+        return $delimiter;
     }
 
     /**

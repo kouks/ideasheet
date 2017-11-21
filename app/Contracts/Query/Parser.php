@@ -2,17 +2,22 @@
 
 namespace App\Contracts\Query;
 
-use Illuminate\Support\Collection;
-
 interface Parser
 {
     /**
-     * Filters provided query parts based on regex.
+     * Filters provided query based on regex.
      *
-     * @param  \Illuminate\Support\Collection  $queryParts
+     * @param  string  $query
+     * @return string
+     */
+    public function parse(string $query);
+
+    /**
+     * Returns all matches from the previously parsed query string.
+     *
      * @return \Illuminate\Support\Collection
      */
-    public function filterParts(Collection $queryParts);
+    public function matches();
 
     /**
      * Provides the regex to filter by.
