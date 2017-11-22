@@ -2,16 +2,13 @@
   "private": true,
   "scripts": {
     "watch": "node resources/assets/build/dev.js",
-    "build": "node resources/assets/build/prod.js",
-    "test": "mocha-webpack --webpack-config webpack.config.js --recursive resources/assets/tests/**/*.spec.js --require resources/assets/tests/setup",
-    "prod": "npm run test && npm run build"
+    "build": "node resources/assets/build/prod.js"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.1.2",
     "browser-sync": "^2.18.13",
-    "chai": "^4.1.2",
     "css-loader": "^0.28.7",
     "eslint": "^3.19.0",
     "eslint-config-standard": "^6.2.1",
@@ -21,10 +18,6 @@
     "eslint-plugin-standard": "^3.0.1",
     "extract-text-webpack-plugin": "^3.0.2",
     "friendly-errors-webpack-plugin": "^1.6.1",
-    "jsdom": "^11.3.0",
-    "jsdom-global": "^3.0.2",
-    "mocha": "^4.0.1",
-    "mocha-webpack": "^1.0.1",
     "node-sass": "^4.5.3",
     "sass-loader": "^6.0.6",
     "uglifyjs-webpack-plugin": "^1.0.1",

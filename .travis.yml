@@ -21,7 +21,7 @@ before_script:
 
 script:
   - vendor/bin/phpunit
-  - npm run prod
+  - npm run build
 
 notifications:
   email: false
