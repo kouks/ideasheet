@@ -17,11 +17,7 @@ class TagTest extends TestCase
 
         $tags = Tag::createNew([$tag->name, 'asdf']);
 
-        $this->assertEquals(
-            $tags->first()->id,
-            $tag->id
-        );
-
+        $this->assertEquals($tags->first()->id, $tag->id);
         $this->assertCount(2, Tag::all());
     }
 }
