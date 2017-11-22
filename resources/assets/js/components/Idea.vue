@@ -1,7 +1,7 @@
 <template>
   <div class="column is-4">
-    <div class="idea">
-      <div v-show="idea.content" :class="['idea-content', contentClass]">
+    <div class="idea" :style="{ background: idea.color }">
+      <div v-show="idea.content" :style="{ color: contentColor }" :class="['idea-content', contentClass]">
         {{ idea.content }}
       </div>
 
@@ -31,6 +31,10 @@ export default {
   computed: {
     contentClass () {
       return (this.idea.content && this.idea.content.length < 50) ? 'is-caption' : ''
+    },
+
+    contentColor () {
+      return (parseInt(this.idea.color.replace('#', ''), 16) > 0xffffff / 2) ? '#eee' : '#000'
     },
 
     attachments () {
