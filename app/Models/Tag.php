@@ -26,30 +26,16 @@ class Tag extends Model
     }
 
     /**
-     * This method makes sure that we only create those tags that
-     * are not already created.
-     *
-     * Note that I find this method a bit ugly and might rewrite it soon.
+     * This method makes sure that we only create those tags that are not
+     * already created.
      *
      * @param  array  $tags
      * @return \Illuminate\Support\Collection
      */
     public static function createNew($tags)
     {
-        $tagInstances = collect([]);
-
-        foreach ($tags as $tagName) {
-            $tag = static::where('name', $tagName)->first();
-
-            if (is_null($tag)) {
-                $tagInstances->push(static::create(['name' => $tagName]));
-
-                continue;
-            }
-
-            $tagInstances->push($tag);
-        }
-
-        return $tagInstances;
+        return collect($tags)->map(function ($tag) {
+            return static::firstOrCreate(['name' => $tag]);
+        });
     }
 }
