@@ -24,18 +24,4 @@ class Tag extends Model
     {
         return $this->belongsToMany(Idea::class);
     }
-
-    /**
-     * This method makes sure that we only create those tags that are not
-     * already created.
-     *
-     * @param  array  $tags
-     * @return \Illuminate\Support\Collection
-     */
-    public static function createNew($tags)
-    {
-        return collect($tags)->map(function ($tag) {
-            return static::firstOrCreate(['name' => $tag]);
-        });
-    }
 }

@@ -57,8 +57,8 @@ class IdeaController extends Controller
 
         // This part makes sure that provided tags will not be duplicates and
         // attaches them to our new idea.
-        Tag::createNew($data['tags'])->each(function (Tag $tag) use ($idea) {
-            $idea->tags()->attach($tag);
+        collect($data['tags'])->each(function ($tag) use ($idea) {
+            $idea->tags()->attach(Tag::firstOrCreate(['name' => $tag]));
         });
 
         // We add all the attachments that we parsed from the query string.
