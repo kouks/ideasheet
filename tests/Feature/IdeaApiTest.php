@@ -3,12 +3,13 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class IdeaApiTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseMigrations, DatabaseTransactions;
 
     public function setUp()
     {
@@ -155,5 +156,20 @@ class IdeaApiTest extends TestCase
 
         $this->assertEquals((int) $data[count($data) - 1]->id, 1);
         $this->assertEquals((int) $data[0]->id, count($data));
+    }
+
+    /** @test */
+    public function it_sends_notification_after_creating_a_new_idea_if_supposed_to()
+    {
+        \Illuminate\Support\Facades\Notification::fake();
+
+        $response = $this->withHeaders($this->headers)->post('/api/v1/ideas', [
+            'query' => '$! asd #tag',
+        ]);
+
+        $response->assertStatus(201);
+        \Illuminate\Support\Facades\Notification::assertSentTo(
+            [new \App\Slack\ScriptyBois], \App\Notifications\IdeaCreated::class
+        );
     }
 }

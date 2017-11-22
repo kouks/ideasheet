@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Tag;
 use App\Models\Idea;
+use App\Slack\ScriptyBois;
 use App\Contracts\Query\Analyzer;
 use App\Http\Requests\IdeaRequest;
+use App\Notifications\IdeaCreated;
 use App\Http\Controllers\Controller;
 use App\Contracts\Query\ShouldNotify;
 
@@ -39,9 +41,10 @@ class IdeaController extends Controller
      *
      * @param  \App\Http\Requests\IdeaRequest  $request
      * @param  \App\Ideas\Analyzer  $analyzer
+     * @param  \App\Slack\ScriptyBois  $scriptyBois
      * @return \Illuminate\Http\Response
      */
-    public function store(IdeaRequest $request, Analyzer $analyzer)
+    public function store(IdeaRequest $request, Analyzer $analyzer, ScriptyBois $scriptyBois)
     {
         // First we retrieve parsed data from the query by running it through
         // our glorious analyzer.
@@ -63,9 +66,9 @@ class IdeaController extends Controller
 
         // One last thing before sending the response is to make sure that if
         // the users should be notified about our new idea, we do so.
-        // if ($builder instanceof ShouldNotify) {
-        //     //
-        // }
+        if ($builder instanceof ShouldNotify) {
+            $scriptyBois->notify(new IdeaCreated($idea));
+        }
 
         // Finally we return a 201 CREATED response with all the data about the
         // new idea.
