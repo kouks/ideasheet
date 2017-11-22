@@ -1,12 +1,21 @@
 
+.idea-grid-sizer, .idea
+  width: calc(33.3333% - 6.66px)
+  margin-bottom: 10px
+
+  @media screen and (max-width: $tablet)
+    width: 100%
+
 .idea
   border: 1px solid $grey-lighter
   transition: .5s all ease
   border-radius: $radius-small
   overflow: hidden
+  background: white
 
   &:hover
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2)
+    z-index: 100
 
   &-content
     padding: 20px;
@@ -24,13 +33,12 @@
         max-height: 1000px
 
   &-tags
-    background: white
     font-size: $size-7
     padding: 10px
 
     .idea-tag
       display: inline-block
-      background: $light
+      background: rgba(219, 219, 219, .7)
       padding: 4px 7px
       margin-right: 5px
       border-radius: $radius-small

@@ -1,30 +1,36 @@
 <template>
-  <div class="column is-4">
-    <div class="idea" :style="{ background: idea.color }">
-      <div v-show="idea.content" :style="{ color: contentColor }" :class="['idea-content', contentClass]">
-        {{ idea.content }}
-      </div>
+  <div class="idea" :style="{ background: idea.color }">
+    <div v-show="idea.content" :style="{ color: contentColor }" :class="['idea-content', contentClass]">
+      {{ idea.content }}
+    </div>
 
-      <div class="idea-tags" v-show="idea.tags.length">
-        <a class="idea-tag" href="" v-for="tag in idea.tags">#{{ tag.name }}</a>
-      </div>
+    <div class="idea-tags" v-show="idea.tags.length">
+      <a class="idea-tag" href="" v-for="tag in idea.tags">#{{ tag.name }}</a>
+    </div>
 
-      <div class="idea-snippet" v-for="{ content } in attachments(2)">
-        <code>{{ content.replaceAll('`', '') }}</code>
-      </div>
+    <div v-show="attachments(2).length" class="idea-snippet" v-for="{ content } in attachments(2)">
+      <code>{{ content.replaceAll('`', '') }}</code>
+    </div>
 
-      <a :href="content" target="_blank" class="idea-link" v-for="{ content } in attachments(0)">
-        {{ content }}
-      </a>
+    <a
+      :href="content"
+      class="idea-link"
+      target="_blank"
+      v-for="{ content } in attachments(0)"
+      v-show="attachments(0).length"
+    >
+      {{ content }}
+    </a>
 
-      <div class="idea-image" v-for="{ content } in attachments(1)">
-        <img src="" alt="Attachment Image" v-lazy-load="content">
-      </div>
+    <div v-show="attachments(1).length" class="idea-image" v-for="{ content } in attachments(1)">
+      <img src="" alt="Attachment Image" v-lazy-load="content">
     </div>
   </div>
 </template>
 
 <script>
+import Masonry from 'masonry-layout'
+
 export default {
   props: ['idea'],
 
@@ -34,6 +40,10 @@ export default {
     },
 
     contentColor () {
+      if (!this.idea.color) {
+        return '#000'
+      }
+
       return (parseInt(this.idea.color.replace('#', ''), 16) > 0xffffff / 2) ? '#eee' : '#000'
     },
 
@@ -42,6 +52,17 @@ export default {
         return this.idea.attachments.filter(item => item.type === type)
       }
     }
+  },
+
+  mounted () {
+    this.$nextTick(() => {
+      this.masonry = new Masonry('.idea-grid', {
+        columnWidth: '.idea-grid-sizer',
+        itemSelector: '.idea',
+        percentPosition: true,
+        gutter: 10
+      })
+    })
   }
 }
 </script>

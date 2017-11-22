@@ -18,7 +18,7 @@ class CreateIdeasTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->text('content')->nullable();
             $table->text('query');
-            $table->string('color')->nullable();
+            $table->string('color')->nullable()->default('#fff');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')

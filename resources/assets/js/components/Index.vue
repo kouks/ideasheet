@@ -16,7 +16,8 @@
 
     <main id="ideas" class="section is-small">
       <div class="container">
-        <div class="columns is-multiline">
+        <div class="idea-grid">
+          <div style="display: none" class="idea-grid-sizer"></div>
           <idea
             v-for="idea in ideas"
             :key="idea.id"
