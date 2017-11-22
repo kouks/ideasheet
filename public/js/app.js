@@ -11786,7 +11786,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODU
 /* harmony default export */ __webpack_exports__["default"] = (new __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */]({
   components: { App: __WEBPACK_IMPORTED_MODULE_1__App__["a" /* default */] },
   el: '#app',
-  router: new __WEBPACK_IMPORTED_MODULE_3_vue_router__["a" /* default */]({ routes: __WEBPACK_IMPORTED_MODULE_2__routes__["a" /* default */] }),
+  router: new __WEBPACK_IMPORTED_MODULE_3_vue_router__["a" /* default */]({ routes: __WEBPACK_IMPORTED_MODULE_2__routes__["a" /* default */], mode: 'history' }),
   template: '<App />'
 }));
 
@@ -12393,7 +12393,7 @@ var render = function() {
         ),
         _vm._v(" "),
         _vm._l(_vm.attachments(2), function(snippet) {
-          return _c("div", { staticClass: "idea-snippet" }, [
+          return _c("div", { staticClass: "idea-snippet is-caption" }, [
             _c("code", [_vm._v(_vm._s(snippet.content.replaceAll("`", "")))])
           ])
         })

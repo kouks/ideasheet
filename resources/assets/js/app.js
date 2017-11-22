@@ -22,6 +22,6 @@ Vue.use(Router)
 export default new Vue({
   components: { App },
   el: '#app',
-  router: new Router({ routes }),
+  router: new Router({ routes, mode: 'history' }),
   template: '<App />'
 })

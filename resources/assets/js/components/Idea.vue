@@ -9,7 +9,7 @@
         <a class="idea-tag" href="" v-for="tag in idea.tags">#{{ tag.name }}</a>
       </div>
 
-      <div class="idea-snippet" v-for="snippet in attachments(2)">
+      <div class="idea-snippet is-caption" v-for="snippet in attachments(2)">
         <code>{{ snippet.content.replaceAll('`', '') }}</code>
       </div>
     </div>
