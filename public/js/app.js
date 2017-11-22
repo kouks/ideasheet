@@ -12337,13 +12337,21 @@ if (false) {(function () {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
   props: ['idea'],
 
   computed: {
     contentClass() {
-      return this.idea.content.length < 50 ? 'is-caption' : '';
+      return this.idea.content && this.idea.content.length < 50 ? 'is-caption' : '';
     },
 
     attachments() {
@@ -12368,9 +12376,21 @@ var render = function() {
       "div",
       { staticClass: "idea" },
       [
-        _c("div", { class: ["idea-content", _vm.contentClass] }, [
-          _vm._v("\n      " + _vm._s(_vm.idea.content) + "\n    ")
-        ]),
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.idea.content,
+                expression: "idea.content"
+              }
+            ],
+            class: ["idea-content", _vm.contentClass]
+          },
+          [_vm._v("\n      " + _vm._s(_vm.idea.content) + "\n    ")]
+        ),
         _vm._v(" "),
         _c(
           "div",
@@ -12392,9 +12412,39 @@ var render = function() {
           })
         ),
         _vm._v(" "),
-        _vm._l(_vm.attachments(2), function(snippet) {
-          return _c("div", { staticClass: "idea-snippet is-caption" }, [
-            _c("code", [_vm._v(_vm._s(snippet.content.replaceAll("`", "")))])
+        _vm._l(_vm.attachments(2), function(ref) {
+          var content = ref.content
+          return _c("div", { staticClass: "idea-snippet" }, [
+            _c("code", [_vm._v(_vm._s(content.replaceAll("`", "")))])
+          ])
+        }),
+        _vm._v(" "),
+        _vm._l(_vm.attachments(0), function(ref) {
+          var content = ref.content
+          return _c(
+            "a",
+            {
+              staticClass: "idea-link",
+              attrs: { href: content, target: "_blank" }
+            },
+            [_vm._v("\n      " + _vm._s(content) + "\n    ")]
+          )
+        }),
+        _vm._v(" "),
+        _vm._l(_vm.attachments(1), function(ref) {
+          var content = ref.content
+          return _c("div", { staticClass: "idea-image" }, [
+            _c("img", {
+              directives: [
+                {
+                  name: "lazy-load",
+                  rawName: "v-lazy-load",
+                  value: content,
+                  expression: "content"
+                }
+              ],
+              attrs: { src: "", alt: "Attachment Image" }
+            })
           ])
         })
       ],
@@ -16217,9 +16267,23 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var _typeof="fun
 
 /***/ }),
 /* 50 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(3);
 
 
+/**
+ * The image lazy-loading directive.
+ */
+__WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].directive('lazy-load', (el, { value }) => {
+  const img = document.createElement('img');
+  img.src = value;
+  img.onload = () => {
+    el.src = value;
+  };
+});
 
 /***/ }),
 /* 51 */

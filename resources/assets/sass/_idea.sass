@@ -1,6 +1,12 @@
 
 .idea
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.4)
+  border: 1px solid $grey-lighter
+  transition: .5s all ease
+  border-radius: $radius-small
+  overflow: hidden
+
+  &:hover
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2)
 
   &-content
     padding: 20px;
@@ -29,12 +35,15 @@
       margin-right: 5px
       border-radius: $radius-small
 
-  &-snippet
+  &-link, &-snippet
     background: $light
     padding: 10px
+    display: block
 
-    &.is-caption
-      font-size: $size-4
+  &-image
+    overflow: hidden
+    line-height: 0
+
 
 
 
