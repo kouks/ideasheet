@@ -4,8 +4,17 @@
       {{ idea.content }}
     </div>
 
+    <div class="idea-date">
+      <small class="has-text-grey"><i>{{ idea.date }}</i></small>
+    </div>
+
     <div class="idea-tags" v-show="idea.tags.length">
-      <a class="idea-tag" href="" v-for="tag in idea.tags">#{{ tag.name }}</a>
+      <a
+        class="idea-tag"
+        href="#"
+        v-for="tag in idea.tags"
+        @click.prevent="$store.commit('updateQuery', { text: `@ #${tag.name}` })"
+      >#{{ tag.name }}</a>
     </div>
 
     <div v-show="attachments(2).length" class="idea-snippet" v-for="{ content } in attachments(2)">

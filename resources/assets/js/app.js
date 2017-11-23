@@ -1,15 +1,16 @@
 import Vue from 'vue'
 import App from './App'
+import axios from 'axios'
 import store from './store'
 import routes from './routes'
 import Router from 'vue-router'
+import VueAxios from 'vue-axios'
 
 /**
  * First we will load all of this project's JavaScript dependencies as well as
  * various helper functions.
  */
 
-require('./bootstrap')
 require('./directives')
 require('./helpers')
 
@@ -19,6 +20,7 @@ require('./helpers')
  */
 
 Vue.use(Router)
+Vue.use(VueAxios, axios)
 
 export default new Vue({
   components: { App },

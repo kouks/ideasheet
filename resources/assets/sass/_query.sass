@@ -1,7 +1,5 @@
 
 .query
-  display: flex
-
   .query-overlay
     position: fixed
     top: 0
@@ -14,20 +12,27 @@
     transition: .5s opacity ease
 
   .query-input
-    padding: 1rem 1.5rem
-    font-size: $size-4
-    line-height: $size-4
-    min-height: 3.5rem
-    flex: 1
-    outline: none
     background: white
-    text-align: left
-    transition: .5s all ease
+    border-radius: $radius-small
     border: 1px solid $grey-lighter
     color: $grey
     font-family: $family-monospace
-    border-radius: $radius-small
+    font-size: $size-4
+    height: 60px
+    line-height: $size-4
+    outline: none
+    overflow: hidden
+    padding: 1rem 1.5rem
+    resize: none
+    text-align: left
+    transition: .5s all ease
+    transition-property: box-shadow, margin, border
+    width: 100%
+    word-break: break-all
+    word-wrap: break-word
     z-index: 15
+    position: relative
+    display: block
 
     &:focus
       border-color: $grey-light

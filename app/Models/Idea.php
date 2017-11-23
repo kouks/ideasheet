@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Koch\Casters\Behavior\Castable;
 use Illuminate\Database\Eloquent\Model;
 
 class Idea extends Model
 {
+    use Castable;
+
     /**
      * The attributes that are mass assignable.
      *

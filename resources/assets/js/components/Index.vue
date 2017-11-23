@@ -2,11 +2,11 @@
   <div>
     <header class="hero is-small">
       <div class="hero-body">
-        <div class="container has-text-centered">
+        <div class="container">
           <div class="columns">
             <div class="column is-6 is-offset-3">
               <query-input
-                @submit="storePost($event)"
+                @submit="storePost()"
               />
             </div>
           </div>
@@ -19,7 +19,7 @@
         <div class="idea-grid">
           <div style="display: none" class="idea-grid-sizer"></div>
           <idea
-            v-for="idea in ideas"
+            v-for="idea in $store.getters.allIdeas"
             :key="idea.id"
             :idea="idea"
           />
@@ -36,30 +36,8 @@ import QueryInput from './QueryInput'
 export default {
   components: { QueryInput, Idea },
 
-  data () {
-    return {
-      ideas: []
-    }
-  },
-
   mounted () {
-    this.loadIdeas()
-  },
-
-  methods: {
-    storePost (query) {
-      this.$http.post('/api/v1/ideas', { query })
-        .then((response) => {
-          this.ideas.unshift(response.data)
-        })
-    },
-
-    loadIdeas () {
-      this.$http.get('/api/v1/ideas')
-        .then(response => {
-          this.ideas = response.data
-        })
-    }
+    this.$store.dispatch('loadIdeas')
   }
 }
 </script>

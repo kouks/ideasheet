@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b0970c5d71311db5406069eaa1c4d229",
-    "content-hash": "e549007e62d7cb665bdee782f7dd06cc",
+    "hash": "9f909f3ddd295669ee1b618f92d4276a",
+    "content-hash": "c2c9521abe783be703b4d685e905ca7b",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -587,6 +587,53 @@
                 }
             ],
             "time": "2015-04-20 18:58:01"
+        },
+        {
+            "name": "kouks/laravel-casters",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kouks/laravel-casters.git",
+                "reference": "6b5ada1147b658cf2866a9e9573b66ff699edbbf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kouks/laravel-casters/zipball/6b5ada1147b658cf2866a9e9573b66ff699edbbf",
+                "reference": "6b5ada1147b658cf2866a9e9573b66ff699edbbf",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^5.3",
+                "php": ">=5.6.4"
+            },
+            "require-dev": {
+                "fzaninotto/faker": "^1.6",
+                "phpunit/phpunit": "~5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Koch\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pavel Koch",
+                    "email": "kouks.koch@gmail.com"
+                }
+            ],
+            "description": "Provides a convenient way to cast and transform your models for API purposes.",
+            "keywords": [
+                "api",
+                "casters",
+                "laravel",
+                "transform"
+            ],
+            "time": "2016-11-07 21:17:02"
         },
         {
             "name": "laravel/framework",

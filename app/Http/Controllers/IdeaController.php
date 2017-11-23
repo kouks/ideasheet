@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use App\Models\Idea;
 use App\Slack\ScriptyBois;
+use App\Casters\IdeaCaster;
 use App\Contracts\Query\Analyzer;
 use App\Http\Requests\IdeaRequest;
 use App\Notifications\IdeaCreated;
-use App\Http\Controllers\Controller;
 use App\Contracts\Query\ShouldNotify;
 
 class IdeaController extends Controller
@@ -26,14 +26,15 @@ class IdeaController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \App\Casters\IdeaCaster  $caster
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(IdeaCaster $caster)
     {
         $ideas = Idea::orderBy('id', 'desc')->get();
 
         return response()
-            ->json($ideas->load(['tags', 'attachments']), 200);
+            ->json($caster->cast($ideas), 200);
     }
 
     /**
@@ -73,7 +74,7 @@ class IdeaController extends Controller
         // Finally we return a 201 CREATED response with all the data about the
         // new idea.
         return response()
-            ->json($idea->load(['tags', 'attachments']), 201);
+            ->json($idea->cast(), 201);
     }
 
     /**
@@ -85,7 +86,7 @@ class IdeaController extends Controller
     public function show(Idea $idea)
     {
         return response()
-            ->json($idea->load(['tags', 'attachments']), 200);
+            ->json($idea->cast(), 200);
     }
 
     /**

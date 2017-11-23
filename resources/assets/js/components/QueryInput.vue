@@ -1,12 +1,13 @@
 <template>
   <div class="query">
-    <div
+    <textarea
       ref="query"
       class="query-input"
-      contenteditable="true"
-      @paste="clearQuery()"
-    ></div>
-
+      rows="1"
+      v-model="$store.state.query"
+      @keypress="adjustHeight($event)"
+      @paste="adjustHeight($event)"
+    ></textarea>
     <div class="query-overlay"></div>
   </div>
 </template>
@@ -29,62 +30,34 @@ export default {
   },
 
   methods: {
-    handleGlobalKeydownEvent (event) {
-      let code = event.keyCode || event.which
-      let el = this.queryInput()
+    handleGlobalKeydownEvent (e) {
+      let code = e.keyCode || e.which
+      let el = this.$refs.query
 
       if (document.activeElement !== el && this.delimiters[code]) {
-        event.preventDefault()
-        this.query(this.delimiters[code])
+        e.preventDefault()
+        this.$store.commit('updateQuery', { text: this.delimiters[code] })
+        el.focus()
       }
 
-      if (document.activeElement === el && code === 13 && !event.shiftKey) {
-        event.preventDefault()
-        this.$emit('submit', this.query())
+      if (document.activeElement === el && code === 13 && !e.shiftKey) {
+        e.preventDefault()
+        this.$store.dispatch('storeIdea')
         el.blur()
-        this.query('')
       }
 
       if (document.activeElement === el && code === 27) {
-        this.query('')
+        this.$store.commit('updateQuery', { text: '' })
         el.blur()
       }
     },
 
-    clearQuery () {
+    adjustHeight ({ target }) {
       this.$nextTick(() => {
-        this.query(this.queryInput().innerText)
+        target.style.height = (target.scrollHeight > target.clientHeight)
+          ? (target.scrollHeight) + 'px'
+          : '60px'
       })
-    },
-
-    query (val) {
-      let el = this.queryInput()
-
-      if (val === undefined) {
-        return el.innerText
-      }
-
-      el.innerText = val
-      this.cursorToEndOf(el)
-    },
-
-    queryInput () {
-      return this.$refs.query
-    },
-
-    cursorToEndOf (el) {
-      if (!el.childNodes[0]) {
-        return
-      }
-
-      let node = el.childNodes[el.childNodes.length - 1]
-      let length = node.textContent.length
-      let range = document.createRange()
-      let sel = window.getSelection()
-      range.setStart(node, length)
-      range.collapse(true)
-      sel.removeAllRanges()
-      sel.addRange(range)
     }
   }
 }

@@ -6,8 +6,7 @@
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('auth')->get('/{uri?}', function () {
+Route::get('/{uri?}', function () {
     return view('index');
 });
 
-Auth::routes();
