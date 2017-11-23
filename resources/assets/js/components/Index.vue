@@ -5,9 +5,7 @@
         <div class="container">
           <div class="columns">
             <div class="column is-6 is-offset-3">
-              <query-input
-                @submit="storePost()"
-              />
+              <query-input />
             </div>
           </div>
         </div>

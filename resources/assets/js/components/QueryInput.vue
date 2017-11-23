@@ -16,9 +16,11 @@
 export default {
   data () {
     return {
-      delimiters: {
-        162: '$', // Key code for ů
-        86: '@' // Key code for v
+      listeners: {
+        162: this.dollarSignPressed,
+        86: this.atSignPressed,
+        13: this.enterPressed,
+        27: this.escapePressed
       }
     }
   },
@@ -30,26 +32,52 @@ export default {
   },
 
   methods: {
-    handleGlobalKeydownEvent (e) {
-      let code = e.keyCode || e.which
-      let el = this.$refs.query
+    handleGlobalKeydownEvent (event) {
+      let code = event.keyCode || event.which
 
-      if (document.activeElement !== el && this.delimiters[code]) {
-        e.preventDefault()
-        this.$store.commit('updateQuery', { text: this.delimiters[code] })
-        el.focus()
+      if (this.listeners[code]) {
+        this.listeners[code](event, document.activeElement, this.$refs.query)
+      }
+    },
+
+    dollarSignPressed (event, active, el) {
+      if (active === el) {
+        return
       }
 
-      if (document.activeElement === el && code === 13 && !e.shiftKey) {
-        e.preventDefault()
-        this.$store.dispatch('storeIdea')
-        el.blur()
+      event.preventDefault()
+      this.$store.commit('updateQuery', { text: '$' })
+      el.focus()
+    },
+
+    atSignPressed (event, active, el) {
+      if (active === el) {
+        return
       }
 
-      if (document.activeElement === el && code === 27) {
-        this.$store.commit('updateQuery', { text: '' })
-        el.blur()
+      event.preventDefault()
+      this.$store.commit('updateQuery', { text: '@' })
+      el.focus()
+    },
+
+    enterPressed (event, active, el) {
+      if (active !== el) {
+        return
       }
+
+      event.preventDefault()
+      this.$store.dispatch('storeIdea')
+      el.blur()
+    },
+
+    escapePressed (event, active, el) {
+      if (active !== el) {
+        return
+      }
+
+      event.preventDefault()
+      this.$store.commit('updateQuery', { text: '' })
+      el.blur()
     },
 
     adjustHeight ({ target }) {

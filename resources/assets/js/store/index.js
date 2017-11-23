@@ -18,7 +18,7 @@ export default new Vuex.Store({
       state.query = text
     },
 
-    setIdeas (state, { data }) {
+    updateIdeas (state, { data }) {
       state.ideas = data
     },
 
@@ -29,7 +29,7 @@ export default new Vuex.Store({
 
   actions: {
     storeIdea ({ dispatch, commit, state }) {
-      Vue.prototype.$http.post('/api/v1/ideas', { query: state.query })
+      return Vue.prototype.$http.post('/api/v1/ideas', { query: state.query })
         .then((response) => {
           commit('updateQuery', { text: '' })
           commit('addIdea', { idea: response.data })
@@ -37,8 +37,8 @@ export default new Vuex.Store({
     },
 
     loadIdeas ({ dispatch, commit }) {
-      Vue.prototype.$http.get('/api/v1/ideas')
-        .then(response => commit('setIdeas', response))
+      return Vue.prototype.$http.get('/api/v1/ideas')
+        .then(response => commit('updateIdeas', response))
     }
   }
 })

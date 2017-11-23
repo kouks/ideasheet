@@ -60,11 +60,13 @@ export default {
   },
 
   mounted () {
-    this.masonry = new Masonry('.idea-grid', {
-      columnWidth: '.idea-grid-sizer',
-      itemSelector: '.idea',
-      percentPosition: true,
-      gutter: 10
+    this.$nextTick(() => {
+      this.masonry = new Masonry('.idea-grid', {
+        columnWidth: '.idea-grid-sizer',
+        itemSelector: '.idea',
+        percentPosition: true,
+        gutter: 10
+      })
     })
   }
 }
