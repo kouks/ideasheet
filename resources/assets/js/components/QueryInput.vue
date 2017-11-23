@@ -7,9 +7,7 @@
       @paste="clearQuery()"
     ></div>
 
-    <button class="query-button" @click="$emit('submit', query())">
-      Post
-    </button>
+    <div class="query-overlay"></div>
   </div>
 </template>
 
@@ -26,20 +24,29 @@ export default {
 
   mounted () {
     this.$nextTick(() => {
-      window.addEventListener('keyup', this.handleGlobalKeyupEvent)
+      window.addEventListener('keydown', this.handleGlobalKeydownEvent)
     })
   },
 
   methods: {
-    handleGlobalKeyupEvent (event) {
+    handleGlobalKeydownEvent (event) {
       let code = event.keyCode || event.which
       let el = this.queryInput()
 
       if (document.activeElement !== el && this.delimiters[code]) {
+        event.preventDefault()
         this.query(this.delimiters[code])
       }
 
+      if (document.activeElement === el && code === 13 && !event.shiftKey) {
+        event.preventDefault()
+        this.$emit('submit', this.query())
+        el.blur()
+        this.query('')
+      }
+
       if (document.activeElement === el && code === 27) {
+        this.query('')
         el.blur()
       }
     },

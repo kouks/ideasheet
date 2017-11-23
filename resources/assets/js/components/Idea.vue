@@ -40,11 +40,7 @@ export default {
     },
 
     contentColor () {
-      if (!this.idea.color) {
-        return '#000'
-      }
-
-      return (parseInt(this.idea.color.replace('#', ''), 16) > 0xffffff / 2) ? '#eee' : '#000'
+      return (this.idea.color && (parseInt(this.idea.color.replace('#', ''), 16) > 0xffffff / 2)) ? '#eee' : '#000'
     },
 
     attachments () {
@@ -55,13 +51,11 @@ export default {
   },
 
   mounted () {
-    this.$nextTick(() => {
-      this.masonry = new Masonry('.idea-grid', {
-        columnWidth: '.idea-grid-sizer',
-        itemSelector: '.idea',
-        percentPosition: true,
-        gutter: 10
-      })
+    this.masonry = new Masonry('.idea-grid', {
+      columnWidth: '.idea-grid-sizer',
+      itemSelector: '.idea',
+      percentPosition: true,
+      gutter: 10
     })
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <header class="hero is-small">
-      <div class="hero-body query-container">
+      <div class="hero-body">
         <div class="container has-text-centered">
           <div class="columns">
             <div class="column is-6 is-offset-3">

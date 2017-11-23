@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App'
+import store from './store'
 import routes from './routes'
 import Router from 'vue-router'
 
@@ -23,5 +24,6 @@ export default new Vue({
   components: { App },
   el: '#app',
   router: new Router({ routes, mode: 'history' }),
+  store,
   template: '<App />'
 })

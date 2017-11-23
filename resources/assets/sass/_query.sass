@@ -1,13 +1,17 @@
 
-.query-container
-  background: white
-  transition: .5s all ease
-
-  &:hover
-    background: $light
-
 .query
   display: flex
+
+  .query-overlay
+    position: fixed
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    z-index: -1
+    background: rgba(0, 0, 0, .3)
+    opacity: 0
+    transition: .5s opacity ease
 
   .query-input
     padding: 1rem 1.5rem
@@ -20,44 +24,16 @@
     text-align: left
     transition: .5s all ease
     border: 1px solid $grey-lighter
-    border-right: 0
     color: $grey
     font-family: $family-monospace
+    border-radius: $radius-small
+    z-index: 15
 
     &:focus
       border-color: $grey-light
-
-    &:focus + .query-button
-      background: $primary
-      border-color: $primary
-      color: $light
-
-    &:focus, &:focus + .query-button
       margin: 10rem 0
+      box-shadow: 0px 20px 40px -15px rgba(0, 0, 0, 0.65);
 
-  .query-button
-    background: white
-    border: none
-    color: white
-    font-size: $size-4
-    line-height: $size-4
-    outline: none
-    padding: 15px 35px
-    transition: .5s all ease
-    cursor: pointer
-    display: inline-block
-    border: 1px solid $grey-lighter
-    border-left: 0
-    font-family: $family-monospace
-
-
-  > .query-button, > .query-input
-    &:first-child
-      border-top-left-radius: $radius-small
-      border-bottom-left-radius: $radius-small
-
-    &:last-child
-      border-top-right-radius: $radius-small
-      border-bottom-right-radius: $radius-small
-
-
+      + .query-overlay
+        z-index: 10
+        opacity: 1
