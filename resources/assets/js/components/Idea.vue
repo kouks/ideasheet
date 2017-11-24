@@ -18,8 +18,8 @@ import Attachment from '@/enums/Attachment'
 import IdeaLink from '@/components/Idea/Link'
 import IdeaTags from '@/components/Idea/Tags'
 import IdeaImage from '@/components/Idea/Image'
-import IdeaSnippet from '@/components/Idea/Snippet'
 import IdeaContent from '@/components/Idea/Content'
+import IdeaSnippet from '@/components/Idea/Snippet'
 
 export default {
   props: ['idea'],

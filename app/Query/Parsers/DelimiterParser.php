@@ -32,6 +32,6 @@ class DelimiterParser extends Parser
             return preg_quote($delimiter);
         }, static::$DELIMITERS);
 
-        return '(' . implode('|', $delimiters) . ')';
+        return '('.implode('|', $delimiters).')';
     }
 }

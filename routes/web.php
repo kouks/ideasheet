@@ -9,4 +9,3 @@
 Route::get('/{uri?}', function () {
     return view('index');
 });
-
