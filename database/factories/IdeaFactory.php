@@ -8,6 +8,7 @@ $factory->define(App\Models\Idea::class, function (Faker $faker) {
         'content' => $faker->paragraph,
         'query' => $faker->slug,
         'color' => 'white',
+        'featured' => ! rand(0, 4),
     ];
 });
 

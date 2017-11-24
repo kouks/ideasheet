@@ -19,6 +19,7 @@ class CreateIdeasTable extends Migration
             $table->text('content')->nullable();
             $table->text('query');
             $table->string('color')->nullable()->default('#fff');
+            $table->boolean('featured')->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')

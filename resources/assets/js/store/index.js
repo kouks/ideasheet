@@ -36,6 +36,10 @@ export default new Vuex.Store({
       })
     },
 
+    clearIdeas (state) {
+      state.ideas = []
+    },
+
     addIdea (state, { idea }) {
       state.ideas.unshift(idea)
     },
@@ -62,12 +66,18 @@ export default new Vuex.Store({
     },
 
     loadIdeas ({ commit, state }) {
-      return Vue.prototype.$http.get('/api/v1/ideas?page=' + state.page)
+      return Vue.prototype.$http.get(`/api/v1/ideas?page=${state.page}&query=${encodeURIComponent(state.query)}`)
         .then(response => commit('updateIdeas', response))
     },
 
     loadMoreIdeas ({ commit, dispatch }) {
       commit('incrementPage')
+
+      return dispatch('loadIdeas')
+    },
+
+    reloadIdeas ({ commit, dispatch }) {
+      commit('clearIdeas')
 
       return dispatch('loadIdeas')
     },

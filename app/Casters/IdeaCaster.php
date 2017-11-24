@@ -19,6 +19,7 @@ class IdeaCaster extends Caster
             'content',
             'query',
             'color',
+            'featured' => '!type:bool',
             'tags' => function (Idea $idea) {
                 return $idea->tags->toArray();
             },

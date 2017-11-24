@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <layout-master>
     <header class="hero is-small">
       <div class="hero-body">
         <div class="container">
@@ -24,15 +24,16 @@
         </div>
       </div>
     </main>
-  </div>
+  </layout-master>
 </template>
 
 <script>
 import Idea from './Idea'
 import QueryInput from './QueryInput'
+import LayoutMaster from '@/components/Layouts/Master'
 
 export default {
-  components: { QueryInput, Idea },
+  components: { QueryInput, Idea, LayoutMaster },
 
   mounted () {
     this.$store.dispatch('loadIdeas')
@@ -40,6 +41,10 @@ export default {
     this.$nextTick(() => {
       window.addEventListener('scroll', this.handleScrollEvent)
     })
+  },
+
+  beforeDestroy () {
+    window.removeEventListener('scroll', this.handleScrollEvent)
   },
 
   methods: {

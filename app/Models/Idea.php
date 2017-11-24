@@ -16,7 +16,7 @@ class Idea extends Model
      * @var array
      */
     protected $fillable = [
-        'content', 'color', 'query',
+        'content', 'color', 'query', 'featured',
     ];
 
     /**

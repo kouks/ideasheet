@@ -11,6 +11,8 @@ use App\Contracts\Query\Analyzer;
 use App\Http\Requests\IdeaRequest;
 use App\Notifications\IdeaCreated;
 use App\Contracts\Query\ShouldNotify;
+use App\Query\Builders\SearchBuilder;
+use App\Exceptions\Query\InvalidBuilderDelimiterException;
 
 class IdeaController extends Controller
 {
@@ -27,12 +29,38 @@ class IdeaController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * This really needs some more work.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Ideas\Analyzer  $analyzer
      * @param  \App\Casters\IdeaCaster  $caster
      * @return \Illuminate\Http\Response
+     *
+     * @throws \App\Exceptions\Query\InvalidBuilderDelimiterException
      */
-    public function index(IdeaCaster $caster)
+    public function index(Request $request, Analyzer $analyzer, IdeaCaster $caster)
     {
-        $ideas = Idea::orderBy('id', 'desc')->paginated(20);
+        if (empty($request->query('query'))) {
+            $ideas = Idea::orderBy('id', 'desc')->paginated(20);
+
+            return response()
+                ->json($caster->cast($ideas), 200);
+        }
+
+        $builder = $analyzer->analyze($request->query('query'))->builder();
+
+        if (! ($builder instanceof SearchBuilder)) {
+            throw new InvalidBuilderDelimiterException('Search delimitert is required.');
+        }
+
+        $data = $builder->build();
+
+        $ideas = Idea::orderBy('id', 'desc')
+            ->where('content', 'LIKE', "%{$data['content']}%")
+            ->whereHas('tags', function ($builder) use ($data) {
+                return $builder->whereIn('name', $data['tags']);
+            })
+            ->paginated(20);
 
         return response()
             ->json($caster->cast($ideas), 200);

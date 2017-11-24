@@ -31,6 +31,10 @@ export default {
     })
   },
 
+  beforeDestroy () {
+    window.removeEventListener('keydown', this.handleGlobalKeydownEvent)
+  },
+
   methods: {
     handleGlobalKeydownEvent (event) {
       let code = event.keyCode || event.which
@@ -66,8 +70,15 @@ export default {
       }
 
       event.preventDefault()
-      this.$store.dispatch('storeIdea')
       el.blur()
+
+      if (this.$store.state.query.match(/^\$/)) {
+        return this.$store.dispatch('storeIdea')
+      }
+
+      if (this.$store.state.query.match(/^@/)) {
+        return this.$store.dispatch('reloadIdeas')
+      }
     },
 
     escapePressed (event, el) {
