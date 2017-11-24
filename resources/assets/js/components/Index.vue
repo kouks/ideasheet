@@ -36,6 +36,18 @@ export default {
 
   mounted () {
     this.$store.dispatch('loadIdeas')
+
+    this.$nextTick(() => {
+      window.addEventListener('scroll', this.handleScrollEvent)
+    })
+  },
+
+  methods: {
+    handleScrollEvent () {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        this.$store.dispatch('loadMoreIdeas')
+      }
+    }
   }
 }
 </script>

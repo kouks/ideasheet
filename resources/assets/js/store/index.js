@@ -10,6 +10,7 @@ export default new Vuex.Store({
   },
 
   state: {
+    page: 1,
     ideas: [],
     query: '',
     ideaErrors: {},
@@ -30,7 +31,9 @@ export default new Vuex.Store({
     },
 
     updateIdeas (state, { data }) {
-      state.ideas = data
+      data.forEach((idea) => {
+        state.ideas.push(idea)
+      })
     },
 
     addIdea (state, { idea }) {
@@ -39,6 +42,10 @@ export default new Vuex.Store({
 
     updateIdeaErrors (state, { errors }) {
       state.ideaErrors = errors
+    },
+
+    incrementPage (state) {
+      state.page++
     }
   },
 
@@ -54,9 +61,15 @@ export default new Vuex.Store({
         })
     },
 
-    loadIdeas ({ commit }) {
-      return Vue.prototype.$http.get('/api/v1/ideas')
+    loadIdeas ({ commit, state }) {
+      return Vue.prototype.$http.get('/api/v1/ideas?page=' + state.page)
         .then(response => commit('updateIdeas', response))
+    },
+
+    loadMoreIdeas ({ commit, dispatch }) {
+      commit('incrementPage')
+
+      return dispatch('loadIdeas')
     },
 
     focusQueryInput ({ state }) {

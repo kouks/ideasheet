@@ -14,7 +14,7 @@ class IdeasTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(Idea::class, 5)->create()->each(function (Idea $i) {
+        factory(Idea::class, 50)->create()->each(function (Idea $i) {
             Tag::inRandomOrder()->limit(rand(1, 3))->get()->each(function (Tag $t) use ($i) {
                 $i->tags()->attach($t);
             });

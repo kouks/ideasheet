@@ -11,6 +11,8 @@ class IdeaApiTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
+    protected $perPage = 20;
+
     public function setUp()
     {
         parent::setUp();
@@ -36,9 +38,10 @@ class IdeaApiTest extends TestCase
     }
 
     /** @test */
-    public function it_fetches_all_ideas()
+    public function it_fetches_first_page_of_ideas()
     {
-        $validResponse = (new \App\Casters\IdeaCaster())->cast(\App\Models\Idea::all());
+        $validResponse = (new \App\Casters\IdeaCaster())
+            ->cast(\App\Models\Idea::orderBy('id', 'desc')->limit($this->perPage)->get());
 
         $response = $this->withHeaders($this->headers)->get('/api/v1/ideas');
 
@@ -148,17 +151,6 @@ class IdeaApiTest extends TestCase
     }
 
     /** @test */
-    public function it_sorts_ideas_by_date_desc()
-    {
-        $response = $this->withHeaders($this->headers)->get('/api/v1/ideas');
-
-        $data = json_decode($response->content());
-
-        $this->assertEquals((int) $data[count($data) - 1]->id, 1);
-        $this->assertEquals((int) $data[0]->id, count($data));
-    }
-
-    /** @test */
     public function it_sends_notification_after_creating_a_new_idea_if_supposed_to()
     {
         \Illuminate\Support\Facades\Notification::fake();
@@ -171,5 +163,17 @@ class IdeaApiTest extends TestCase
         \Illuminate\Support\Facades\Notification::assertSentTo(
             [new \App\Slack\ScriptyBois], \App\Notifications\IdeaCreated::class
         );
+    }
+
+    /** @test */
+    public function it_paginates_results()
+    {
+        $validResponse = (new \App\Casters\IdeaCaster())
+            ->cast(\App\Models\Idea::orderBy('id', 'desc')->skip($this->perPage)->take($this->perPage)->get());
+
+        $response = $this->withHeaders($this->headers)->get('/api/v1/ideas?page=2');
+
+        $response->assertStatus(200)
+            ->assertExactJson($validResponse);
     }
 }
