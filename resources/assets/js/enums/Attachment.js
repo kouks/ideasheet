@@ -1,5 +1,5 @@
 export default {
   LINK: 0,
   IMAGE: 1,
-  CODE: 2
+  CODE_SNIPPET: 2
 }

@@ -27,23 +27,23 @@ class IdeaApiTest extends TestCase
     /** @test */
     public function it_fetches_a_single_idea()
     {
-        $validResponse = \App\Models\Idea::find(1)->load(['tags', 'attachments']);
+        $validResponse = \App\Models\Idea::find(1)->cast();
 
         $response = $this->withHeaders($this->headers)->get('/api/v1/ideas/1');
 
         $response->assertStatus(200)
-            ->assertExactJson($validResponse->toArray());
+            ->assertExactJson($validResponse);
     }
 
     /** @test */
     public function it_fetches_all_ideas()
     {
-        $validResponse = \App\Models\Idea::all()->load(['tags', 'attachments']);
+        $validResponse = (new \App\Casters\IdeaCaster())->cast(\App\Models\Idea::all());
 
         $response = $this->withHeaders($this->headers)->get('/api/v1/ideas');
 
         $response->assertStatus(200)
-            ->assertExactJson($validResponse->toArray());
+            ->assertExactJson($validResponse);
     }
 
     /** @test */

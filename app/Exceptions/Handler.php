@@ -67,11 +67,6 @@ class Handler extends ExceptionHandler
                 ->json(['error' => 'The provided API token is invalid.'], 401);
         }
 
-        if ($exception instanceof ValidationException) {
-            return response()
-                ->json(['error' => 'The request is missing the [query] parameter.'], 422);
-        }
-
         if ($exception instanceof MethodNotAllowedException) {
             return response()
                 ->json(['error' => 'The method is not allowed for this uri.'], 405);

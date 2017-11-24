@@ -15,14 +15,15 @@ class IdeaCaster extends Caster
     public function castRules()
     {
         return [
+            'id',
             'content',
             'query',
             'color',
             'tags' => function (Idea $idea) {
-                return $idea->tags;
+                return $idea->tags->toArray();
             },
             'attachments' => function (Idea $idea) {
-                return $idea->attachments;
+                return $idea->attachments->toArray();
             },
             'date' => function (Idea $idea) {
                 return $idea->created_at->diffForHumans();

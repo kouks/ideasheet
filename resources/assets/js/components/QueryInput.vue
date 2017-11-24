@@ -5,8 +5,7 @@
       class="query-input"
       rows="1"
       v-model="$store.state.query"
-      @keypress="adjustHeight($event)"
-      @paste="adjustHeight($event)"
+      @input="adjustHeight($event)"
     ></textarea>
     <div class="query-overlay"></div>
   </div>
@@ -27,6 +26,7 @@ export default {
 
   mounted () {
     this.$nextTick(() => {
+      this.$store.commit('setQueryInput', { el: this.$refs.query })
       window.addEventListener('keydown', this.handleGlobalKeydownEvent)
     })
   },
@@ -36,12 +36,12 @@ export default {
       let code = event.keyCode || event.which
 
       if (this.listeners[code]) {
-        this.listeners[code](event, document.activeElement, this.$refs.query)
+        this.listeners[code](event, this.$store.state.queryInput)
       }
     },
 
-    dollarSignPressed (event, active, el) {
-      if (active === el) {
+    dollarSignPressed (event, el) {
+      if (event.target === el) {
         return
       }
 
@@ -50,8 +50,8 @@ export default {
       el.focus()
     },
 
-    atSignPressed (event, active, el) {
-      if (active === el) {
+    atSignPressed (event, el) {
+      if (event.target === el) {
         return
       }
 
@@ -60,8 +60,8 @@ export default {
       el.focus()
     },
 
-    enterPressed (event, active, el) {
-      if (active !== el) {
+    enterPressed (event, el) {
+      if (event.target !== el) {
         return
       }
 
@@ -70,8 +70,8 @@ export default {
       el.blur()
     },
 
-    escapePressed (event, active, el) {
-      if (active !== el) {
+    escapePressed (event, el) {
+      if (event.target !== el) {
         return
       }
 

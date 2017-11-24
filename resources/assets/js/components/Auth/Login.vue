@@ -12,6 +12,10 @@
                   </span>
                   <input autofocus type="text" v-model="form.email" placeholder="Email">
                 </div>
+
+                <span v-for="error in errors.email" class="form-message has-text-danger">
+                  {{ error }}
+                </span>
               </div>
 
               <div class="form-field">
@@ -21,10 +25,18 @@
                   </span>
                   <input type="password" v-model="form.password" placeholder="Password">
                 </div>
+
+                <span v-for="error in errors.password" class="form-message has-text-danger">
+                  {{ error }}
+                </span>
               </div>
 
               <div class="form-field">
                 <button type="submit" class="action is-fullwidth is-primary">Login</button>
+
+                <span v-show="errors.error" class="form-message has-text-danger">
+                  {{ errors.error }}
+                </span>
               </div>
             </form>
           </div>
@@ -35,6 +47,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Cookie from 'js-cookie'
 
 export default {
@@ -44,15 +57,14 @@ export default {
     }
   },
 
+  computed: mapState({ errors: state => state.auth.loginErrors }),
+
   methods: {
     login () {
-      this.$http.post('/api/v1/login', this.form)
+      this.$store.dispatch('auth/login', this.form)
         .then((response) => {
           Cookie.set('ideasheet_session', response.data.api_token)
           this.$router.push({ name: 'home' })
-        })
-        .catch(({ response }) => {
-          console.log(response)
         })
     }
   }
