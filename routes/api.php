@@ -12,6 +12,7 @@ Route::prefix('v1')->group(function () {
             return auth()->user();
         });
 
+        Route::get('ideas/filter', 'IdeaController@filter')->name('ideas.filter');
         Route::resource('ideas', 'IdeaController', [
            'only' => ['index', 'store', 'show', 'update', 'destroy'],
         ]);

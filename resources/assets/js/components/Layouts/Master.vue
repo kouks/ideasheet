@@ -21,7 +21,7 @@ import Cookie from 'js-cookie'
 export default {
   methods: {
     logout () {
-      Cookie.remove('ideasheet_session')
+      Cookie.remove('ideasheet_token')
       this.$router.push({ name: 'login' })
     }
   }
