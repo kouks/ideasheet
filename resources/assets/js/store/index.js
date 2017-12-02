@@ -37,6 +37,7 @@ export default new Vuex.Store({
     },
 
     clearIdeas (state) {
+      state.page = 1
       state.ideas = []
     },
 
@@ -55,7 +56,8 @@ export default new Vuex.Store({
 
   actions: {
     storeIdea ({ commit, state }) {
-      return Vue.prototype.$http.post('/api/v1/ideas', { query: state.query })
+      return Vue.prototype.$http
+        .post('/api/v1/ideas', { query: state.query })
         .then((response) => {
           commit('updateQuery', { text: '' })
           commit('addIdea', { idea: response.data })
@@ -66,20 +68,25 @@ export default new Vuex.Store({
     },
 
     loadIdeas ({ commit, state }) {
-      return Vue.prototype.$http.get(`/api/v1/ideas?page=${state.page}&query=${encodeURIComponent(state.query)}`)
+      return Vue.prototype.$http
+        .get(`/api/v1/ideas?page=${state.page}`)
         .then(response => commit('updateIdeas', response))
     },
 
-    loadMoreIdeas ({ commit, dispatch }) {
+    loadMoreIdeas ({ commit, dispatch, state }) {
       commit('incrementPage')
+
+      if (state.query.match(/^@/)) {
+        return dispatch('filterIdeas')
+      }
 
       return dispatch('loadIdeas')
     },
 
-    reloadIdeas ({ commit, dispatch }) {
-      commit('clearIdeas')
-
-      return dispatch('loadIdeas')
+    filterIdeas ({ commit, state }) {
+      return Vue.prototype.$http
+        .get(`/api/v1/ideas/filter?page=${state.page}&query=${encodeURIComponent(state.query)}`)
+        .then(response => commit('updateIdeas', response))
     },
 
     focusQueryInput ({ state }) {

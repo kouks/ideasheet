@@ -28,6 +28,7 @@ script:
 
 deploy:
 - provider: script
+  skip_cleanup: true
   script: /bin/bash deploy.sh
   on:
     branch: master

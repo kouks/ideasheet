@@ -14915,6 +14915,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODU
     },
 
     clearIdeas(state) {
+      state.page = 1;
       state.ideas = [];
     },
 
@@ -14942,19 +14943,21 @@ __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].use(__WEBPACK_IMPORTED_MODU
     },
 
     loadIdeas({ commit, state }) {
-      return __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].prototype.$http.get(`/api/v1/ideas?page=${state.page}&query=${encodeURIComponent(state.query)}`).then(response => commit('updateIdeas', response));
+      return __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].prototype.$http.get(`/api/v1/ideas?page=${state.page}`).then(response => commit('updateIdeas', response));
     },
 
-    loadMoreIdeas({ commit, dispatch }) {
+    loadMoreIdeas({ commit, dispatch, state }) {
       commit('incrementPage');
 
+      if (state.query.match(/^@/)) {
+        return dispatch('filterIdeas');
+      }
+
       return dispatch('loadIdeas');
     },
 
-    reloadIdeas({ commit, dispatch }) {
-      commit('clearIdeas');
-
-      return dispatch('loadIdeas');
+    filterIdeas({ commit, state }) {
+      return __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].prototype.$http.get(`/api/v1/ideas/filter?page=${state.page}&query=${encodeURIComponent(state.query)}`).then(response => commit('updateIdeas', response));
     },
 
     focusQueryInput({ state }) {
@@ -18008,8 +18011,9 @@ if (false) {(function () {
       }
 
       event.preventDefault();
-      this.$store.commit('updateQuery', { text: '$' });
       el.focus();
+
+      this.$store.commit('updateQuery', { text: '$' });
     },
 
     atSignPressed(event, el) {
@@ -18018,8 +18022,9 @@ if (false) {(function () {
       }
 
       event.preventDefault();
-      this.$store.commit('updateQuery', { text: '@' });
       el.focus();
+
+      this.$store.commit('updateQuery', { text: '@' });
     },
 
     enterPressed(event, el) {
@@ -18031,22 +18036,37 @@ if (false) {(function () {
       el.blur();
 
       if (this.$store.state.query.match(/^\$/)) {
-        return this.$store.dispatch('storeIdea');
+        this.$store.dispatch('storeIdea');
+
+        return;
       }
 
       if (this.$store.state.query.match(/^@/)) {
-        return this.$store.dispatch('reloadIdeas');
+        this.$store.commit('clearIdeas');
+        this.$store.dispatch('filterIdeas');
+
+        return;
       }
+
+      this.$store.commit('clearIdeas');
+      this.$store.dispatch('loadIdeas');
     },
 
     escapePressed(event, el) {
+      if (this.$store.state.query.match(/^@/)) {
+        this.$store.commit('clearIdeas');
+        this.$store.dispatch('loadIdeas');
+        this.$store.commit('updateQuery', { text: '' });
+      }
+
       if (event.target !== el) {
         return;
       }
 
       event.preventDefault();
-      this.$store.commit('updateQuery', { text: '' });
       el.blur();
+
+      this.$store.commit('updateQuery', { text: '' });
     },
 
     adjustHeight({ target }) {
@@ -18190,7 +18210,7 @@ if (false) {(function () {
 /* harmony default export */ __webpack_exports__["a"] = ({
   methods: {
     logout() {
-      __WEBPACK_IMPORTED_MODULE_0_js_cookie___default.a.remove('ideasheet_session');
+      __WEBPACK_IMPORTED_MODULE_0_js_cookie___default.a.remove('ideasheet_token');
       this.$router.push({ name: 'login' });
     }
   }
@@ -18420,13 +18440,12 @@ if (false) {(function () {
       form: {}
     };
   },
-
   computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])({ errors: state => state.auth.loginErrors }),
 
   methods: {
     login() {
       this.$store.dispatch('auth/login', this.form).then(response => {
-        __WEBPACK_IMPORTED_MODULE_1_js_cookie___default.a.set('ideasheet_session', response.data.api_token);
+        __WEBPACK_IMPORTED_MODULE_1_js_cookie___default.a.set('ideasheet_token', response.data.api_token, { domain: window.location.hostname });
         this.$router.push({ name: 'home' });
       });
     }
@@ -18650,7 +18669,7 @@ const handle = (to, from, next) => {
 };
 
 const addAuthorizationHeader = () => {
-  let token = __WEBPACK_IMPORTED_MODULE_1_js_cookie___default.a.get('ideasheet_session');
+  let token = __WEBPACK_IMPORTED_MODULE_1_js_cookie___default.a.get('ideasheet_token');
 
   __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */].prototype.$http.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 };

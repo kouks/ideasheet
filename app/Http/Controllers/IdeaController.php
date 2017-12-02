@@ -16,6 +16,13 @@ use App\Exceptions\Query\InvalidBuilderDelimiterException;
 class IdeaController extends Controller
 {
     /**
+     * Number of ideas to paginate by.
+     *
+     * @var int
+     */
+    protected $paginateBy = 20;
+
+    /**
      * Class constructor.
      *
      * @return void
@@ -28,41 +35,15 @@ class IdeaController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * This really needs some more work.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Ideas\Analyzer  $analyzer
      * @param  \App\Casters\IdeaCaster  $caster
      * @return \Illuminate\Http\Response
      *
      * @throws \App\Exceptions\Query\InvalidBuilderDelimiterException
      */
-    public function index(Request $request, Analyzer $analyzer, IdeaCaster $caster)
+    public function index(IdeaCaster $caster)
     {
-        if (empty($request->query('query'))) {
-            return response()
-                ->json($caster->cast(Idea::orderBy('id', 'desc')->paginated(20)), 200);
-        }
-
-        $builder = $analyzer->analyze($request->query('query'))->builder();
-
-        if (! ($builder instanceof SearchBuilder)) {
-            throw new InvalidBuilderDelimiterException('Search delimitert is required.');
-        }
-
-        $data = $builder->build();
-
-        $query = Idea::orderBy('id', 'desc')
-            ->where('content', 'LIKE', "%{$data['content']}%");
-
-        if (count($data['tags']) > 0) {
-            $query->whereHas('tags', function ($builder) use ($data) {
-                return $builder->whereIn('name', $data['tags']);
-            });
-        }
-
         return response()
-            ->json($caster->cast($query->paginated(20)), 200);
+            ->json($caster->cast(Idea::orderBy('id', 'desc')->paginated($this->paginateBy)), 200);
     }
 
     /**
@@ -140,5 +121,58 @@ class IdeaController extends Controller
         $idea->delete();
 
         return response(null, 204);
+    }
+
+    /**
+     * Filters resources based on provided query.
+     *
+     * @param  \App\Http\Requests\IdeaRequest  $request
+     * @param  \App\Contracts\Query\Analyzer  $analyzer
+     * @param  \App\Casters\IdeaCaster  $caster
+     * @return \Illuminate\Http\Response
+     *
+     * @throws \App\Exceptions\Query\InvalidBuilderDelimiterException
+     */
+    public function filter(IdeaRequest $request, Analyzer $analyzer, IdeaCaster $caster)
+    {
+        // First we retrieve parsed data from the query by running it through
+        // our glorious analyzer.
+        $builder = $analyzer->analyze($request['query'])->builder();
+        $data = $builder->build();
+
+        // We check if the query has a valid delimiter.
+        if (! ($builder instanceof SearchBuilder)) {
+            throw new InvalidBuilderDelimiterException('The query requires the [@] search delimiter.');
+        }
+
+        // We create a new query, starting by ordering all ideas by id in
+        // descending order.
+        $query = Idea::orderBy('id', 'desc');
+
+        // If there is any content to filter by, we do it.
+        if (! empty($data['content'])) {
+            $query->where('content', 'LIKE', "%{$data['content']}%");
+        }
+
+        // Same for tags.
+        if (! empty($data['tags'])) {
+            $query->whereHas('tags', function ($query) use ($data) {
+                $query->whereIn('name', $data['tags']);
+            });
+        }
+
+        // And attachments...
+        if (! empty($data['attachments'])) {
+            $query->whereHas('attachments', function ($query) use ($data) {
+                foreach ($data['attachments'] as $attachment) {
+                    $query->where('type', $attachment['type'])
+                        ->where('content', 'LIKE', '%'.str_replace('`', '', $attachment['content']).'%');
+                }
+            });
+        }
+
+        // Finally, we paginate the results and return them to the client.
+        return response()
+            ->json($caster->cast($query->paginated($this->paginateBy)), 200);
     }
 }
