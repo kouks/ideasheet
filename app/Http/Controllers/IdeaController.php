@@ -6,7 +6,6 @@ use App\Models\Tag;
 use App\Models\Idea;
 use App\Slack\ScriptyBois;
 use App\Casters\IdeaCaster;
-use Illuminate\Http\Request;
 use App\Contracts\Query\Analyzer;
 use App\Http\Requests\IdeaRequest;
 use App\Notifications\IdeaCreated;
