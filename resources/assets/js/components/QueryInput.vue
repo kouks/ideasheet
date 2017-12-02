@@ -50,8 +50,9 @@ export default {
       }
 
       event.preventDefault()
-      this.$store.commit('updateQuery', { text: '$' })
       el.focus()
+
+      this.$store.commit('updateQuery', { text: '$' })
     },
 
     atSignPressed (event, el) {
@@ -60,8 +61,9 @@ export default {
       }
 
       event.preventDefault()
-      this.$store.commit('updateQuery', { text: '@' })
       el.focus()
+
+      this.$store.commit('updateQuery', { text: '@' })
     },
 
     enterPressed (event, el) {
@@ -73,22 +75,37 @@ export default {
       el.blur()
 
       if (this.$store.state.query.match(/^\$/)) {
-        return this.$store.dispatch('storeIdea')
+        this.$store.dispatch('storeIdea')
+
+        return
       }
 
       if (this.$store.state.query.match(/^@/)) {
-        return this.$store.dispatch('reloadIdeas')
+        this.$store.commit('clearIdeas')
+        this.$store.dispatch('filterIdeas')
+
+        return
       }
+
+      this.$store.commit('clearIdeas')
+      this.$store.dispatch('loadIdeas')
     },
 
     escapePressed (event, el) {
+      if (this.$store.state.query.match(/^@/)) {
+        this.$store.commit('clearIdeas')
+        this.$store.dispatch('loadIdeas')
+        this.$store.commit('updateQuery', { text: '' })
+      }
+
       if (event.target !== el) {
         return
       }
 
       event.preventDefault()
-      this.$store.commit('updateQuery', { text: '' })
       el.blur()
+
+      this.$store.commit('updateQuery', { text: '' })
     },
 
     adjustHeight ({ target }) {
