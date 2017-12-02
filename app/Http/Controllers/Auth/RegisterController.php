@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -26,9 +27,14 @@ class RegisterController extends Controller
      */
     public function register(RegisterRequest $request)
     {
-        event(new Registered($user = User::create($request->all())));
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'api_token' => str_random(60),
+        ]);
 
-        auth()->guard()->login($user);
+        event(new Registered($user));
 
         return response()
             ->json($user, 201);

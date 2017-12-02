@@ -8,7 +8,7 @@
               <div class="form-field">
                 <div class="form-field has-addons">
                   <span class="form-addon">
-                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                    <i class="fa fa-fw fa-envelope" aria-hidden="true"></i>
                   </span>
                   <input autofocus type="text" v-model="form.email" placeholder="Email">
                 </div>
@@ -21,7 +21,7 @@
               <div class="form-field">
                 <div class="form-field has-addons">
                   <span class="form-addon">
-                    <i class="fa fa-key" aria-hidden="true"></i>
+                    <i class="fa fa-fw fa-key" aria-hidden="true"></i>
                   </span>
                   <input type="password" v-model="form.password" placeholder="Password">
                 </div>
@@ -37,6 +37,13 @@
                 <span v-show="errors.error" class="form-message has-text-danger">
                   {{ errors.error }}
                 </span>
+              </div>
+
+              <div class="form-field">
+                <router-link
+                  class="action is-default is-fullwidth"
+                  to="/register"
+                >Create new account</router-link>
               </div>
             </form>
           </div>
@@ -56,6 +63,7 @@ export default {
       form: {}
     }
   },
+
   computed: mapState({ errors: state => state.auth.loginErrors }),
 
   methods: {
