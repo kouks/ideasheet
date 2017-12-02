@@ -41,10 +41,8 @@ class IdeaController extends Controller
     public function index(Request $request, Analyzer $analyzer, IdeaCaster $caster)
     {
         if (empty($request->query('query'))) {
-            $ideas = Idea::orderBy('id', 'desc')->paginated(20);
-
             return response()
-                ->json($caster->cast($ideas), 200);
+                ->json($caster->cast(Idea::orderBy('id', 'desc')->paginated(20)), 200);
         }
 
         $builder = $analyzer->analyze($request->query('query'))->builder();
@@ -55,15 +53,17 @@ class IdeaController extends Controller
 
         $data = $builder->build();
 
-        $ideas = Idea::orderBy('id', 'desc')
-            ->where('content', 'LIKE', "%{$data['content']}%")
-            ->whereHas('tags', function ($builder) use ($data) {
+        $query = Idea::orderBy('id', 'desc')
+            ->where('content', 'LIKE', "%{$data['content']}%");
+
+        if (count($data['tags']) > 0) {
+            $query->whereHas('tags', function ($builder) use ($data) {
                 return $builder->whereIn('name', $data['tags']);
-            })
-            ->paginated(20);
+            });
+        }
 
         return response()
-            ->json($caster->cast($ideas), 200);
+            ->json($caster->cast($query->paginated(20)), 200);
     }
 
     /**
