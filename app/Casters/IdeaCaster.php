@@ -19,12 +19,14 @@ class IdeaCaster extends Caster
             'content',
             'query',
             'color',
-            'featured' => '!type:bool',
             'tags' => function (Idea $idea) {
                 return $idea->tags->toArray();
             },
             'attachments' => function (Idea $idea) {
                 return $idea->attachments->toArray();
+            },
+            'author' => function (Idea $idea) {
+                return $idea->user->name;
             },
             'date' => function (Idea $idea) {
                 return $idea->created_at->diffForHumans();
