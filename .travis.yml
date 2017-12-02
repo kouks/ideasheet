@@ -35,3 +35,4 @@ deploy:
 
 notifications:
   email: false
+  slack: scripty-bois:zrQeg3FNpUvdJ9Jh3ZxuPo4Y
