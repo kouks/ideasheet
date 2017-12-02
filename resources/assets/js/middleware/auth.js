@@ -16,7 +16,7 @@ const handle = (to, from, next) => {
 }
 
 const addAuthorizationHeader = () => {
-  let token = Cookie.get('ideasheet_session')
+  let token = Cookie.get('ideasheet_token')
 
   Vue.prototype.$http.defaults.headers.common['Authorization'] = `Bearer ${token}`
 }

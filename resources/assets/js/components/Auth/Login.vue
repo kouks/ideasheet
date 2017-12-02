@@ -63,7 +63,7 @@ export default {
     login () {
       this.$store.dispatch('auth/login', this.form)
         .then((response) => {
-          Cookie.set('ideasheet_session', response.data.api_token)
+          Cookie.set('ideasheet_token', response.data.api_token)
           this.$router.push({ name: 'home' })
         })
     }
