@@ -4,7 +4,6 @@ php:
 - 7.0
 sudo: false
 
-
 before_install:
 - openssl aes-256-cbc -K $encrypted_3dcf206e8452_key -iv $encrypted_3dcf206e8452_iv
   -in deploy_rsa.enc -out deploy_rsa -d
@@ -29,6 +28,7 @@ script:
 
 deploy:
 - provider: script
+  skip_cleanup: true
   script: /bin/bash deploy.sh
   on:
     branch: master
