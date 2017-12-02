@@ -1,6 +1,6 @@
 <template>
-  <div class="idea">
-    <idea-content :content="idea.content" :color="idea.color" />
+  <div class="idea" :style="{ background: idea.color, color: contentColor }">
+    <idea-content :content="idea.content" />
 
     <idea-tags :tags="idea.tags"/>
 
@@ -41,6 +41,10 @@ export default {
 
     images () {
       return this.attachments(Attachment.IMAGE)
+    },
+
+    contentColor () {
+      return (this.color && (parseInt(this.color.replace('#', ''), 16) > 0xffffff / 2)) ? '#eee' : '#000'
     }
   },
 
