@@ -15232,6 +15232,11 @@ if (false) {(function () {
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -17918,7 +17923,25 @@ var render = function() {
         var id = ref.id
         var content = ref.content
         return _c("idea-image", { key: id, attrs: { image: content } })
-      })
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "idea-footer" }, [
+        _c("p", [
+          _c("i", {
+            staticClass: "fa fa-calendar",
+            attrs: { "aria-hidden": "true" }
+          }),
+          _vm._v(" " + _vm._s(_vm.idea.date))
+        ]),
+        _vm._v(" "),
+        _c("p", [
+          _c("i", {
+            staticClass: "fa fa-user",
+            attrs: { "aria-hidden": "true" }
+          }),
+          _vm._v(" " + _vm._s(_vm.idea.author))
+        ])
+      ])
     ],
     2
   )

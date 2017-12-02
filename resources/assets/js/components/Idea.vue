@@ -9,6 +9,11 @@
     <idea-link :key="id" :link="content" v-for="{ id, content } in links" />
 
     <idea-image :key="id" :image="content" v-for="{ id, content } in images" />
+
+    <div class="idea-footer">
+      <p><i class="fa fa-calendar" aria-hidden="true"></i> {{ idea.date }}</p>
+      <p><i class="fa fa-user" aria-hidden="true"></i> {{ idea.author }}</p>
+    </div>
   </div>
 </template>
 

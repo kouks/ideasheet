@@ -20,6 +20,16 @@ class Idea extends Model
     ];
 
     /**
+     * Specifies the belongs to relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
      * Specifies the has many relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
