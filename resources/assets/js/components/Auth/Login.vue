@@ -56,14 +56,13 @@ export default {
       form: {}
     }
   },
-
   computed: mapState({ errors: state => state.auth.loginErrors }),
 
   methods: {
     login () {
       this.$store.dispatch('auth/login', this.form)
         .then((response) => {
-          Cookie.set('ideasheet_token', response.data.api_token)
+          Cookie.set('ideasheet_token', response.data.api_token, { domain: window.location.hostname })
           this.$router.push({ name: 'home' })
         })
     }
