@@ -133,4 +133,15 @@ class ParserTest extends TestCase
         $this->assertEquals($query, 'lorem');
         $this->assertEquals($parser->matches()->toArray(), ['#TAG']);
     }
+
+    /** @test */
+    public function it_tag_that_starts_as_color()
+    {
+        $parser = new \App\Query\Parsers\ColorParser;
+
+        $query = $parser->parse('#deeplearning lorem');
+
+        $this->assertEquals($query, '#deeplearning lorem');
+        $this->assertEquals($parser->matches()->toArray(), []);
+    }
 }
