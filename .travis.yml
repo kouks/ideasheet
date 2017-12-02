@@ -1,24 +1,36 @@
 language: php
 
 php:
-  - 7.0
-  - 7.1
-
+- 7.0
 sudo: false
 
+before_install:
+- openssl aes-256-cbc -K $encrypted_3dcf206e8452_key -iv $encrypted_3dcf206e8452_iv
+  -in deploy_rsa.enc -out deploy_rsa -d
+- chmod 700 deploy_rsa
+
 install:
-  - travis_retry composer install
-  - travis_retry npm install
+- travis_retry composer install
+- travis_retry npm install
 
 before_script:
-  - mkdir -p storage/framework/{cache,views,sessions}
-  - cp .env.travis .env
-  - php artisan key:generate
-  - php artisan cache:clear
-  - php artisan config:clear
-  - php artisan view:clear
-  - php artisan clear-compiled
+- mkdir -p storage/framework/{cache,views,sessions}
+- cp .env.travis .env
+- php artisan key:generate
+- php artisan cache:clear
+- php artisan config:clear
+- php artisan view:clear
+- php artisan clear-compiled
 
 script:
-  - vendor/bin/phpunit
-  - npm run prod
+- vendor/bin/phpunit
+- npm run build
+
+deploy:
+- provider: script
+  script: /bin/bash deploy.sh
+  on:
+    branch: master
+
+notifications:
+  email: false

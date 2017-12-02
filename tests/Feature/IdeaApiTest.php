@@ -3,12 +3,15 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class IdeaApiTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseMigrations, DatabaseTransactions;
+
+    protected $perPage = 20;
 
     public function setUp()
     {
@@ -26,23 +29,24 @@ class IdeaApiTest extends TestCase
     /** @test */
     public function it_fetches_a_single_idea()
     {
-        $validResponse = \App\Models\Idea::find(1)->load(['tags', 'attachments']);
+        $validResponse = \App\Models\Idea::find(1)->cast();
 
         $response = $this->withHeaders($this->headers)->get('/api/v1/ideas/1');
 
         $response->assertStatus(200)
-            ->assertExactJson($validResponse->toArray());
+            ->assertExactJson($validResponse);
     }
 
     /** @test */
-    public function it_fetches_all_ideas()
+    public function it_fetches_first_page_of_ideas()
     {
-        $validResponse = \App\Models\Idea::all()->load(['tags', 'attachments']);
+        $validResponse = (new \App\Casters\IdeaCaster())
+            ->cast(\App\Models\Idea::orderBy('id', 'desc')->limit($this->perPage)->get());
 
         $response = $this->withHeaders($this->headers)->get('/api/v1/ideas');
 
         $response->assertStatus(200)
-            ->assertExactJson($validResponse->toArray());
+            ->assertExactJson($validResponse);
     }
 
     /** @test */
@@ -124,5 +128,52 @@ class IdeaApiTest extends TestCase
         ]);
 
         $response->assertStatus(405);
+    }
+
+    /** @test */
+    public function it_shows_422_when_invalid_delimiter()
+    {
+        $response = $this->withHeaders($this->headers)->post('/api/v1/ideas', [
+            'query' => '#tag',
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    /** @test */
+    public function it_stores_ideas_with_no_content_or_color()
+    {
+        $response = $this->withHeaders($this->headers)->post('/api/v1/ideas', [
+            'query' => '$ #tag',
+        ]);
+
+        $response->assertStatus(201);
+    }
+
+    /** @test */
+    public function it_sends_notification_after_creating_a_new_idea_if_supposed_to()
+    {
+        \Illuminate\Support\Facades\Notification::fake();
+
+        $response = $this->withHeaders($this->headers)->post('/api/v1/ideas', [
+            'query' => '$! asd #tag',
+        ]);
+
+        $response->assertStatus(201);
+        \Illuminate\Support\Facades\Notification::assertSentTo(
+            [new \App\Slack\ScriptyBois], \App\Notifications\IdeaCreated::class
+        );
+    }
+
+    /** @test */
+    public function it_paginates_results()
+    {
+        $validResponse = (new \App\Casters\IdeaCaster())
+            ->cast(\App\Models\Idea::orderBy('id', 'desc')->skip($this->perPage)->take($this->perPage)->get());
+
+        $response = $this->withHeaders($this->headers)->get('/api/v1/ideas?page=2');
+
+        $response->assertStatus(200)
+            ->assertExactJson($validResponse);
     }
 }

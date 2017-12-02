@@ -13,3 +13,7 @@ window.getBootTime = () => {
 
   return domInteractive - requestStart
 }
+
+String.prototype.replaceAll = function (search, replacement) { // eslint-disable-line
+  return this.replace(new RegExp(search, 'g'), replacement)
+}

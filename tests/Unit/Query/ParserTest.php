@@ -22,12 +22,10 @@ class ParserTest extends TestCase
     {
         $parser = new \App\Query\Parsers\TagParser;
 
-        $parts = $parser->filterParts(collect(['#tag']));
+        $query = $parser->parse('#tag lorem');
 
-        $this->assertEquals(
-            $parts->first(),
-            '#tag'
-        );
+        $this->assertEquals($query, 'lorem');
+        $this->assertEquals($parser->matches()->toArray(), ['#tag']);
     }
 
     /** @test */
@@ -35,9 +33,10 @@ class ParserTest extends TestCase
     {
         $parser = new \App\Query\Parsers\TagParser;
 
-        $parts = $parser->filterParts(collect(['#tag', '#tag2', 'lorem']));
+        $query = $parser->parse('#tag lorem #tag2');
 
-        $this->assertCount(2, $parts);
+        $this->assertEquals($query, 'lorem');
+        $this->assertEquals($parser->matches()->toArray(), ['#tag', '#tag2']);
     }
 
     /** @test */
@@ -45,12 +44,10 @@ class ParserTest extends TestCase
     {
         $parser = new \App\Query\Parsers\ColorParser;
 
-        $parts = $parser->filterParts(collect(['#tag', '#fd2', 'lorem']));
+        $query = $parser->parse('#tag lorem #000');
 
-        $this->assertEquals(
-            $parts->first(),
-            '#fd2'
-        );
+        $this->assertEquals($query, '#tag lorem');
+        $this->assertEquals($parser->matches()->toArray(), ['#000']);
     }
 
     /** @test */
@@ -58,12 +55,10 @@ class ParserTest extends TestCase
     {
         $parser = new \App\Query\Parsers\ColorParser;
 
-        $parts = $parser->filterParts(collect(['#tag', '#b23432', 'lorem']));
+        $query = $parser->parse('#tag lorem #b23432');
 
-        $this->assertEquals(
-            $parts->first(),
-            '#b23432'
-        );
+        $this->assertEquals($query, '#tag lorem');
+        $this->assertEquals($parser->matches()->toArray(), ['#b23432']);
     }
 
     /** @test */
@@ -71,19 +66,12 @@ class ParserTest extends TestCase
     {
         $parser = new \App\Query\Parsers\ImageParser;
 
-        $parts = $parser->filterParts(collect([
-            'https://example.com/images/test/page',
-            'https://example.com/images/test.png',
-            '#tag',
-            'lorem',
-        ]));
-
-        $this->assertEquals(
-            $parts->first(),
-            'https://example.com/images/test.png'
+        $query = $parser->parse(
+            '#tag lorem #b23432 https://example.com/images/test/page https://example.com/images/test.png'
         );
 
-        $this->assertCount(1, $parts);
+        $this->assertEquals($query, '#tag lorem #b23432 https://example.com/images/test/page');
+        $this->assertEquals($parser->matches()->toArray(), ['https://example.com/images/test.png']);
     }
 
     /** @test */
@@ -91,16 +79,10 @@ class ParserTest extends TestCase
     {
         $parser = new \App\Query\Parsers\LinkParser;
 
-        $parts = $parser->filterParts(collect([
-            'https://example.com/test/page',
-            '#tag',
-            'lorem',
-        ]));
+        $query = $parser->parse('#tag lorem #b23432 https://example.com/images/test/page');
 
-        $this->assertEquals(
-            $parts->first(),
-            'https://example.com/test/page'
-        );
+        $this->assertEquals($query, '#tag lorem #b23432');
+        $this->assertEquals($parser->matches()->toArray(), ['https://example.com/images/test/page']);
     }
 
     /** @test */
@@ -108,14 +90,47 @@ class ParserTest extends TestCase
     {
         $parser = new \App\Query\Parsers\ContentParser;
 
-        $parts = $parser->filterParts(collect([
-            'Lorem',
-            'ipsum.',
-        ]));
+        $query = $parser->parse('Lorem ipsum dolor');
 
-        $this->assertEquals(
-            $parts->implode(' '),
-            'Lorem ipsum.'
-        );
+        $this->assertEquals($query, '');
+        $this->assertEquals($parser->matches()->toArray(), ['Lorem ipsum dolor']);
+    }
+
+    /** @test */
+    public function it_finds_a_code_snippet()
+    {
+        $parser = new \App\Query\Parsers\CodeSnippetParser;
+
+        $query = $parser->parse('Lorem ipsum dolor `git checkout -- ` `test`');
+
+        $this->assertEquals($query, 'Lorem ipsum dolor');
+        $this->assertEquals($parser->matches()->toArray(), ['`git checkout -- `', '`test`']);
+    }
+
+    /** @test */
+    public function it_finds_a_delimiter()
+    {
+        $parser = new \App\Query\Parsers\DelimiterParser;
+
+        $query = $parser->parse('$! lorem #tag');
+
+        $this->assertEquals($query, 'lorem #tag');
+        $this->assertEquals($parser->matches()->toArray(), ['$!']);
+
+        $query2 = $parser->parse('@ lorem #tag');
+
+        $this->assertEquals($query2, 'lorem #tag');
+        $this->assertEquals($parser->matches()->toArray(), ['@']);
+    }
+
+    /** @test */
+    public function it_parses_uppercase_tag()
+    {
+        $parser = new \App\Query\Parsers\TagParser;
+
+        $query = $parser->parse('#TAG lorem');
+
+        $this->assertEquals($query, 'lorem');
+        $this->assertEquals($parser->matches()->toArray(), ['#TAG']);
     }
 }

@@ -2,22 +2,51 @@
 
 namespace App\Query\Parsers;
 
-use Illuminate\Support\Collection;
 use App\Contracts\Query\Parser as ParserContract;
 
 abstract class Parser implements ParserContract
 {
     /**
-     * Filters provided query parts based on child class regex.
+     * The collection of all matches from the query.
      *
-     * @param  \Illuminate\Support\Collection  $queryParts
+     * @var \Illuminate\Support\Collection
+     */
+    protected $matches;
+
+    /**
+     * Filters provided query based on regex.
+     *
+     * @param  string  $query
+     * @return string
+     */
+    public function parse(string $query)
+    {
+        preg_match_all($this->regex(), $query, $matches);
+
+        $this->setMatches($matches[1]);
+
+        return trim(preg_replace($this->regex(), '', $query));
+    }
+
+    /**
+     * Returns all matches from the previously parsed query string.
+     *
      * @return \Illuminate\Support\Collection
      */
-    public function filterParts(Collection $queryParts)
+    public function matches()
     {
-        return $queryParts->filter(function ($part) {
-            return (bool) preg_match($this->regex(), $part);
-        });
+        return $this->matches;
+    }
+
+    /**
+     * Saves the matches to an instance variable.
+     *
+     * @param  array  $matches
+     * @return void
+     */
+    protected function setMatches(array $matches)
+    {
+        $this->matches = collect($matches);
     }
 
     /**

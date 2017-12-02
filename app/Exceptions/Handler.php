@@ -4,8 +4,8 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Exceptions\Query\InvalidBuilderDelimiterException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 
@@ -66,14 +66,14 @@ class Handler extends ExceptionHandler
                 ->json(['error' => 'The provided API token is invalid.'], 401);
         }
 
-        if ($exception instanceof ValidationException) {
-            return response()
-                ->json(['error' => 'The request is missing the [query] parameter.'], 422);
-        }
-
         if ($exception instanceof MethodNotAllowedException) {
             return response()
-                ->json(['error' => 'The method is not allowed for this uri'], 405);
+                ->json(['error' => 'The method is not allowed for this uri.'], 405);
+        }
+
+        if ($exception instanceof InvalidBuilderDelimiterException) {
+            return response()
+                ->json(['error' => 'The query string has an invalid delimiter.'], 422);
         }
 
         return parent::render($request, $exception);

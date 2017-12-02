@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
+use Koch\Casters\Behavior\Castable;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\PaginatesResults;
 
 class Idea extends Model
 {
+    use Castable, PaginatesResults;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'content', 'color', 'query',
+        'content', 'color', 'query', 'featured',
     ];
 
     /**

@@ -1,0 +1,78 @@
+
+/**
+ * Generic form styles.
+ *
+ * Available for: <form>
+ *
+ * .form
+ *   .form-field(.has-addons)
+ *     textarea(.has-errors)
+ *     input(.has-errors)
+ *     span.form-addon
+ *     span.form-message
+ */
+
+form.form
+  .form-field
+    &:not(:last-of-type)
+      margin-bottom: 20px
+
+    &.has-addons
+      display: flex
+
+      > *
+        border-left-color: transparent
+        border-radius: 0
+        border-right-color: transparent
+
+        &:first-child
+          border-bottom-left-radius: 2px
+          border-left-color: $grey-lighter
+          border-top-left-radius: 2px
+
+        &:last-child
+          border-bottom-right-radius: 2px
+          border-right-color: $grey-lighter
+          border-top-right-radius: 2px
+
+    span.form-addon
+      background: $light
+      border: 1px solid $grey-lighter
+      color: $grey
+      font-size: $size-5
+      padding: 10px 15px
+
+    span.form-message
+      display: block
+      font-size: $size-7
+      margin: 8px 0 0 15px
+
+    input, textarea
+      background: white
+      border-radius: 2px
+      border: 1px solid $grey-lighter
+      flex: 1
+      font-size: $size-5
+      min-width: 0
+      padding: 10px 15px
+      transition: .2s all ease
+      width: 100%
+
+      &.has-errors
+        box-shadow: 0px 0px 5px 0px adjust-color($red, $alpha: -.5)
+
+      &:disabled
+        background: $light
+        cursor: not-allowed
+
+      &:not(:disabled)
+        &:hover, &:focus
+          box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .2)
+
+      &::placeholder
+        color: $grey
+
+    textarea
+      max-height: 200px
+      min-height: 100px
+      resize: vertical

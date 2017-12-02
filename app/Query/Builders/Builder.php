@@ -2,17 +2,16 @@
 
 namespace App\Query\Builders;
 
-use Illuminate\Support\Collection;
 use App\Contracts\Query\Builder as BuilderContract;
 
 abstract class Builder implements BuilderContract
 {
     /**
-     * The previously parsed query.
+     * The parsers containing the parsed query.
      *
-     * @var \Illuminate\Support\Collection
+     * @var array
      */
-    protected $data;
+    protected $parsers;
 
     /**
      * The original query.
@@ -31,13 +30,13 @@ abstract class Builder implements BuilderContract
     /**
      * Class constructor.
      *
-     * @param  array  $data
+     * @param  array  $parsers
      * @param  string  $query
      * @return void
      */
-    public function __construct(Collection $data, string $query)
+    public function __construct(array $parsers, string $query)
     {
-        $this->data = $data;
+        $this->parsers = $parsers;
         $this->query = $query;
     }
 
@@ -64,7 +63,7 @@ abstract class Builder implements BuilderContract
      */
     protected function buildContent()
     {
-        return $this->data->get('content')->implode(' ');
+        return $this->parsers['content']->matches()->first();
     }
 
     /**
@@ -74,7 +73,7 @@ abstract class Builder implements BuilderContract
      */
     protected function buildColor()
     {
-        return $this->data->get('color')->first();
+        return $this->parsers['color']->matches()->first();
     }
 
     /**
@@ -84,7 +83,7 @@ abstract class Builder implements BuilderContract
      */
     protected function buildTags()
     {
-        return $this->data->get('tags')->map(function ($tag) {
+        return $this->parsers['tags']->matches()->map(function ($tag) {
             return substr($tag, 1, strlen($tag));
         })->values()->toArray();
     }
@@ -99,7 +98,9 @@ abstract class Builder implements BuilderContract
         $attachments = collect([]);
 
         foreach ($this->attachments as $type => $typeName) {
-            $attachments = $attachments->concat($this->data->get($typeName)->map(function ($content) use ($type) {
+            $matches = $this->parsers[$typeName]->matches();
+
+            $attachments = $attachments->concat($matches->map(function ($content) use ($type) {
                 return compact('type', 'content');
             }));
         }

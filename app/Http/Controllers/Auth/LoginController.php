@@ -2,31 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/';
-
     /**
      * Create a new controller instance.
      *
@@ -35,5 +15,45 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Handle a login request to the application.
+     *
+     * @param  \App\Http\Requests\LoginRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function login(LoginRequest $request)
+    {
+        if ($this->attemptLogin($request)) {
+            return response()
+                ->json(auth()->user(), 200);
+        }
+
+        return response()
+            ->json(['error' => 'Invalid credentials.'], 422);
+    }
+
+    /**
+     * Attempt to log the user into the application.
+     *
+     * @param  \App\Http\Requests\LoginRequest  $request
+     * @return bool
+     */
+    protected function attemptLogin(LoginRequest $request)
+    {
+        return auth()->guard()->attempt(
+            $request->only($this->username(), 'password'), $request->filled('remember')
+        );
+    }
+
+    /**
+     * The username field name.
+     *
+     * @return string
+     */
+    protected function username()
+    {
+        return 'email';
     }
 }

@@ -11,6 +11,6 @@ class ContentParser extends Parser
      */
     public function regex()
     {
-        return '/.+/';
+        return '/(.+)/';
     }
 }

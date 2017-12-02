@@ -1,0 +1,63 @@
+
+.idea-grid-sizer, .idea
+  width: calc(33.33333% - 6.66px)
+  margin-bottom: 10px
+
+  @media screen and (max-width: $tablet)
+    width: 100% !important
+
+.idea
+  border: 1px solid $grey-lighter
+  transition: .5s all ease
+  border-radius: $radius-small
+  overflow: hidden
+  background: white
+
+  &:hover
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2)
+    z-index: 100
+
+  &-content
+    padding: 20px;
+    font-size: $size-6
+
+    &.is-caption
+      font-size: $size-4
+      padding-bottom: 20px
+
+    &:not(.is-caption)
+      max-height: 150px
+      overflow: hidden
+
+      &:hover
+        max-height: 1000px
+
+  &-date
+    padding: 0 10px
+
+  &-tags
+    font-size: $size-7
+    padding: 10px
+
+    .idea-tag
+      display: inline-block
+      background: rgba(219, 219, 219, .7)
+      padding: 4px 7px
+      margin-right: 5px
+      border-radius: $radius-small
+
+  &-link, &-snippet
+    background: $light
+    padding: 10px
+    display: block
+
+  &-image
+    overflow: hidden
+    line-height: 0
+
+
+
+
+
+
+

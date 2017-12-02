@@ -25,12 +25,13 @@ return [
     */
 
     'parsers' => [
-        'codeSnippets' => App\Query\Parsers\CodeSnippetParser::class,
-        'color' => App\Query\Parsers\ColorParser::class,
-        'images' => App\Query\Parsers\ImageParser::class,
-        'links' => App\Query\Parsers\LinkParser::class,
-        'tags' => App\Query\Parsers\TagParser::class,
-        'content' => App\Query\Parsers\ContentParser::class,
+        'delimiter' => new App\Query\Parsers\DelimiterParser,
+        'codeSnippets' => new App\Query\Parsers\CodeSnippetParser,
+        'color' => new App\Query\Parsers\ColorParser,
+        'images' => new App\Query\Parsers\ImageParser,
+        'links' => new App\Query\Parsers\LinkParser,
+        'tags' => new App\Query\Parsers\TagParser,
+        'content' => new App\Query\Parsers\ContentParser,
     ],
 
     /*
@@ -46,6 +47,7 @@ return [
     'builders' => [
         '$' => App\Query\Builders\DefaultBuilder::class,
         '$!' => App\Query\Builders\NotifyingBuilder::class,
+        '@' => App\Query\Builders\SearchBuilder::class,
     ],
 
 ];

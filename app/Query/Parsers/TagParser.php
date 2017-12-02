@@ -11,6 +11,6 @@ class TagParser extends Parser
      */
     public function regex()
     {
-        return '/^#[a-z0-9-]+$/';
+        return '/(#[A-Za-z0-9-]+)/';
     }
 }
