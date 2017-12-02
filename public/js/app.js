@@ -15264,7 +15264,7 @@ if (false) {(function () {
     },
 
     contentColor() {
-      return this.color && parseInt(this.color.replace('#', ''), 16) > 0xffffff / 2 ? '#eee' : '#000';
+      return this.idea.color && !this.useBlackText() ? '#eee' : '#000';
     }
   },
 
@@ -15277,6 +15277,19 @@ if (false) {(function () {
         gutter: 10
       });
     });
+  },
+
+  methods: {
+    useBlackText() {
+      let num = this.idea.color.replace('#', '');
+      let by = num.length === 3 ? 1 : 2;
+
+      let r = parseInt(num.substr(0, by).repeat(3 - by), 16);
+      let g = parseInt(num.substr(by, by).repeat(3 - by), 16);
+      let b = parseInt(num.substr(2 * by, by).repeat(3 - by), 16);
+
+      return r * 0.299 + g * 0.587 + b * 0.114 > 186;
+    }
   }
 });
 

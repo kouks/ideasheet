@@ -7,7 +7,6 @@ $factory->define(App\Models\Idea::class, function (Faker $faker) {
         'user_id' => 1,
         'content' => $faker->paragraph,
         'query' => $faker->slug,
-        'color' => 'white',
     ];
 });
 
