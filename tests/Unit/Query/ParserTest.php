@@ -144,4 +144,15 @@ class ParserTest extends TestCase
         $this->assertEquals($query, '#deeplearning lorem');
         $this->assertEquals($parser->matches()->toArray(), []);
     }
+
+    /** @test */
+    public function it_parses_uppercase_letters_in_color_hex()
+    {
+        $parser = new \App\Query\Parsers\ColorParser;
+
+        $query = $parser->parse('#deeplearning #CE93D8 lorem');
+
+        $this->assertEquals($query, '#deeplearning lorem');
+        $this->assertEquals($parser->matches()->toArray(), ['#CE93D8']);
+    }
 }
